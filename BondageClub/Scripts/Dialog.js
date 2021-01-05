@@ -1229,8 +1229,8 @@ function DialogClick() {
 		DialogLeaveItemMenu();
 		DialogLeaveFocusItem();
 		var C = (MouseX < 500) ? Player : CurrentCharacter;
-		let X = CharacterAppearanceXOffset(C, C.HeightRatio) + (MouseX < 500 ? 0 : 500);
-		let Y = CharacterAppearanceYOffset(C, C.HeightRatio);
+		let X = CharacterAppearanceXOffset(C) + (MouseX < 500 ? 0 : 500);
+		let Y = CharacterAppearanceYOffset(C);
 		for (let A = 0; A < AssetGroup.length; A++)
 			if ((AssetGroup[A].Category == "Item") && (AssetGroup[A].Zone != null))
 				for (let Z = 0; Z < AssetGroup[A].Zone.length; Z++)

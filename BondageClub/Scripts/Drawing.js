@@ -287,19 +287,9 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 			CanvasH.getContext("2d").drawImage(Canvas, 0, 0, Canvas.width, Canvas.height, 0, 0, Canvas.width, Canvas.height);
 			Canvas = CanvasH;
 		}
-
-		// Get the height ratio and X & Y offsets based on it
-		let HeightRatio = (IsHeightResizeAllowed == null || IsHeightResizeAllowed == true) ? C.HeightRatio : 1;
-		let XOffset = CharacterAppearanceXOffset(C, HeightRatio);
-		let YOffset = CharacterAppearanceYOffset(C, HeightRatio);
 		
-		// Calculate the vertical parameters, factoring in the character's height ratio, modifiers and the excess canvas overflow
-		let YStart = CanvasUpperOverflow - YOffset / HeightRatio;
-		let SourceHeight = 1000 / HeightRatio;
-		let SourceY = IsInverted ? Canvas.height - (YStart + SourceHeight) : YStart;
-		
-		// Draw the character into a 500x1000 space
-		MainCanvas.drawImage(Canvas, 0, SourceY, Canvas.width / HeightRatio, SourceHeight, X + XOffset * Zoom, Y, 500 * Zoom, 1000 * Zoom);
+		// Draw the character
+		MainCanvas.drawImage(Canvas, 0, 0, Canvas.width, Canvas.height, X, Y, Canvas.width * Zoom, Canvas.height * Zoom);
 
 		// Draw the arousal meter & game images on certain conditions
 		DrawArousalMeter(C, X, Y, Zoom);
@@ -309,17 +299,21 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		// Draws the character focus zones if we need too
 		if ((C.FocusGroup != null) && (C.FocusGroup.Zone != null) && (CurrentScreen != "Preference") && (DialogColor == null)) {
 
+			// Get the height ratio offsets
+			let XOffset = CharacterAppearanceXOffset(C);
+			let YOffset = CharacterAppearanceYOffset(C);
+
 			// Draw all the possible zones in transparent colors (gray if free, yellow if occupied, red if blocker)
 			for (let A = 0; A < AssetGroup.length; A++)
 				if (AssetGroup[A].Zone != null && AssetGroup[A].Name != C.FocusGroup.Name) {
 					var Color = "#80808040";
 					if (InventoryGroupIsBlocked(C, AssetGroup[A].Name)) Color = "#88000580";
 					else if (InventoryGet(C, AssetGroup[A].Name) != null) Color = "#D5A30080";
-					DrawAssetGroupZone(C, AssetGroup[A].Zone, HeightRatio * Zoom, X + XOffset * Zoom, Y + YOffset * Zoom, Color, 5);
+					DrawAssetGroupZone(C, AssetGroup[A].Zone, C.HeightRatio * Zoom, X + XOffset * Zoom, Y + YOffset * Zoom, Color, 5);
 				}
 
 			// Draw the focused zone in cyan
-			DrawAssetGroupZone(C, C.FocusGroup.Zone, HeightRatio * Zoom, X + XOffset * Zoom, Y + YOffset * Zoom, "cyan");
+			DrawAssetGroupZone(C, C.FocusGroup.Zone, C.HeightRatio * Zoom, X + XOffset * Zoom, Y + YOffset * Zoom, "cyan");
 		}
 
 		// Draw the character name below herself
@@ -405,7 +399,7 @@ function DrawImageResize(Source, X, Y, Width, Height) {
  * @param {number[][]} AlphaMasks - A list of alpha masks to apply to the asset
  * @returns {boolean} - whether the image was complete or not
  */
-function DrawImageCanvas(Source, Canvas, X, Y, AlphaMasks) {
+function DrawImageCanvas(Source, Canvas, X, Y, Zoom, AlphaMasks) {
 	var Img = DrawGetImage(Source);
 	if (!Img.complete) return false;
 	if (!Img.naturalWidth) return true;
@@ -416,9 +410,9 @@ function DrawImageCanvas(Source, Canvas, X, Y, AlphaMasks) {
 		var ctx = tmpCanvas.getContext('2d');
 		ctx.drawImage(Img, 0, 0);
 		AlphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - X, y - Y, w, h));
-		Canvas.drawImage(tmpCanvas, X, Y);
+		Canvas.drawImage(tmpCanvas, X, Y, Img.width * Zoom, Img.height * Zoom);
 	} else {
-		Canvas.drawImage(Img, X, Y);
+		Canvas.drawImage(Img, X, Y, Img.width * Zoom, Img.height * Zoom);
 	}
 	return true;
 }
@@ -433,7 +427,7 @@ function DrawImageCanvas(Source, Canvas, X, Y, AlphaMasks) {
  * @param {number[][]} AlphaMasks - A list of alpha masks to apply to the asset
  * @returns {boolean} - whether the image was complete or not
  */
-function DrawCanvas(Img, Canvas, X, Y, AlphaMasks) {
+function DrawCanvas(Img, Canvas, X, Y, Zoom, AlphaMasks) {
 	if (AlphaMasks && AlphaMasks.length) {
 		var tmpCanvas = document.createElement("canvas");
 		tmpCanvas.width = Img.width;
@@ -441,9 +435,9 @@ function DrawCanvas(Img, Canvas, X, Y, AlphaMasks) {
 		var ctx = tmpCanvas.getContext('2d');
 		ctx.drawImage(Img, 0, 0);
 		AlphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - X, y - Y, w, h));
-		Canvas.drawImage(tmpCanvas, X, Y);
+		Canvas.drawImage(tmpCanvas, X, Y, Img.width * Zoom, Img.height * Zoom);
 	} else {
-		Canvas.drawImage(Img, X, Y);
+		Canvas.drawImage(Img, X, Y, Img.width * Zoom, Img.height * Zoom);
 	}
 	return true;
 }

@@ -45,13 +45,13 @@ function CommonDrawCanvasPrepare(C) {
 	if (C.Canvas == null) {
 		C.Canvas = document.createElement("canvas");
 		C.Canvas.width = 500;
-		C.Canvas.height = CanvasDrawHeight;
-	} else C.Canvas.getContext("2d").clearRect(0, 0, 500, CanvasDrawHeight);
+		C.Canvas.height = 1000;
+	} else C.Canvas.getContext("2d").clearRect(0, 0, 500, 1000);
 	if (C.CanvasBlink == null) {
 		C.CanvasBlink = document.createElement("canvas");
 		C.CanvasBlink.width = 500;
-		C.CanvasBlink.height = CanvasDrawHeight;
-	} else C.CanvasBlink.getContext("2d").clearRect(0, 0, 500, CanvasDrawHeight);
+		C.CanvasBlink.height = 1000;
+	} else C.CanvasBlink.getContext("2d").clearRect(0, 0, 500, 1000);
 
 	C.MustDraw = true;
 }
@@ -79,6 +79,10 @@ function CommonDrawAppearanceBuild(C, {
 	drawImageColorizeBlink,
 }) {
 	var LayerCounts = {};
+
+	// The X and Y can be offset based on the character's height
+	let XOffset = CharacterAppearanceXOffset(C);
+	let YOffset = CharacterAppearanceYOffset(C);
 	
 	// Loop through all layers in the character appearance
 	C.AppearanceLayers.forEach((Layer) => {
@@ -118,8 +122,8 @@ function CommonDrawAppearanceBuild(C, {
 			if ((!AlphaDef.Group || !AlphaDef.Group.length) &&
 				(!AlphaDef.Pose || !Array.isArray(AlphaDef.Pose) || !!CommonDrawFindPose(C, AlphaDef.Pose))) {
 				AlphaDef.Masks.forEach(rect => {
-					clearRect(rect[0], rect[1] + CanvasUpperOverflow, rect[2], rect[3]);
-					clearRectBlink(rect[0], rect[1] + CanvasUpperOverflow, rect[2], rect[3]);
+					clearRect(rect[0], rect[1], rect[2], rect[3]);
+					clearRectBlink(rect[0], rect[1], rect[2], rect[3]);
 				});
 			}
 		});
@@ -130,6 +134,7 @@ function CommonDrawAppearanceBuild(C, {
 			if ((Property && Property.Expression && AG.AllowExpression.includes(Property.Expression)))
 				Expression = Property.Expression + "/";
 
+		
 		// Find the X and Y position to draw on
 		var X = Layer.DrawingLeft != null ? Layer.DrawingLeft : (A.DrawingLeft != null ? A.DrawingLeft : AG.DrawingLeft);
 		var Y = Layer.DrawingTop != null ? Layer.DrawingTop : (A.DrawingTop != null ? A.DrawingTop : AG.DrawingTop);
@@ -226,6 +231,14 @@ function CommonDrawAppearanceBuild(C, {
 			}
 		}
 
+		// Reduce and offset the co-ordinates to match the character's height
+		X *= C.HeightRatio;
+		Y *= C.HeightRatio;
+		X += XOffset;
+		Y += YOffset;
+
+		let Zoom = C.HeightRatio;
+
 		// Make any required changes to the colour
 		if (Color === "Default" && A.DefaultColor) {
 			Color = Array.isArray(A.DefaultColor) ? A.DefaultColor[Layer.ColorIndex] : A.DefaultColor;
@@ -234,26 +247,22 @@ function CommonDrawAppearanceBuild(C, {
 			Color = "Default";
 		}
 
-		// Adjust for the increased canvas size
-		Y += CanvasUpperOverflow;
-		AlphaMasks = AlphaMasks.map(([x, y, w, h]) => [x, y + CanvasUpperOverflow, w, h]);
-
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Zoom, Color,
 				AG.DrawingFullAlpha, AlphaMasks
 			);
 			drawImageColorizeBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Color,
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Zoom, Color,
 				AG.DrawingFullAlpha, AlphaMasks
 			);
 		} else {
 			var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
-							 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
-			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
+				(Color.indexOf("#") == 0)) ? "" : "_" + Color;
+			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, Zoom, AlphaMasks);
 			drawImageBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, Zoom, AlphaMasks);
 		}
 
 		// If the item has been locked
@@ -264,8 +273,8 @@ function CommonDrawAppearanceBuild(C, {
 
 			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
 			if (DrawableLayerCount === LayerCounts[CountKey]) {
-				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
-				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
+				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, Zoom, AlphaMasks);
+				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, Zoom, AlphaMasks);
 			}
 		}
 		

@@ -429,9 +429,9 @@ function CharacterAppearanceSetHeightModifiers(C) {
 				}
 		}
 		
-		// Limit values affectable by Property settings in case invalid values were set via console
-		if (Height > CanvasLowerOverflow) Height = CanvasLowerOverflow;
-		if (Height < -CanvasUpperOverflow) Height = -CanvasUpperOverflow;
+		// Limit values affectable by Property settings in case unreasonable values were set via console
+		if (Height > 150) Height = 150;
+		if (Height < -600) Height = -600;
 		if (HeightRatioProportion > 1) HeightRatioProportion = 1;
 		if (HeightRatioProportion < 0) HeightRatioProportion = 0;
 
@@ -454,12 +454,12 @@ function CharacterAppearanceBuildCanvas(C) {
 	CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => C.Canvas.getContext("2d").clearRect(x, y, w, h),
 		clearRectBlink: (x, y, w, h) => C.CanvasBlink.getContext("2d").clearRect(x, y, w, h),
-		drawImage: (src, x, y, alphaMasks) => DrawImageCanvas(src, C.Canvas.getContext("2d"), x, y, alphaMasks),
-		drawImageBlink: (src, x, y, alphaMasks) => DrawImageCanvas(src, C.CanvasBlink.getContext("2d"), x, y, alphaMasks),
-		drawImageColorize: (src, x, y, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.Canvas.getContext("2d"), x, y, 1, color, fullAlpha, alphaMasks),
-		drawImageColorizeBlink: (src, x, y, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.CanvasBlink.getContext("2d"), x, y, 1, color, fullAlpha, alphaMasks),
-		drawCanvas: (Img, x, y, alphaMasks) => DrawCanvas(Img, C.Canvas.getContext("2d"), x, y, alphaMasks),
-		drawCanvasBlink: (Img, x, y, alphaMasks) => DrawCanvas(Img, C.CanvasBlink.getContext("2d"), x, y, alphaMasks),
+		drawImage: (src, x, y, zoom, alphaMasks) => DrawImageCanvas(src, C.Canvas.getContext("2d"), x, y, zoom, alphaMasks),
+		drawImageBlink: (src, x, y, zoom, alphaMasks) => DrawImageCanvas(src, C.CanvasBlink.getContext("2d"), x, y, zoom, alphaMasks),
+		drawImageColorize: (src, x, y, zoom, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.Canvas.getContext("2d"), x, y, zoom, color, fullAlpha, alphaMasks),
+		drawImageColorizeBlink: (src, x, y, zoom, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.CanvasBlink.getContext("2d"), x, y, zoom, color, fullAlpha, alphaMasks),
+		drawCanvas: (Img, x, y, zoom, alphaMasks) => DrawCanvas(Img, C.Canvas.getContext("2d"), x, y, zoom, alphaMasks),
+		drawCanvasBlink: (Img, x, y, zoom, alphaMasks) => DrawCanvas(Img, C.CanvasBlink.getContext("2d"), x, y, zoom, alphaMasks),
 	});
 }
 
@@ -494,8 +494,8 @@ function CharacterAppearanceGetCurrentValue(C, Group, Type) {
  * @param {number} HeightRatio - The character's height ratio
  * @returns {number} - The amount to move the character along the X co-ordinate
  */
-function CharacterAppearanceXOffset(C, HeightRatio) {
-	return 500 * (1 - HeightRatio) / 2;
+function CharacterAppearanceXOffset(C) {
+	return 500 * (1 - C.HeightRatio) / 2;
 }
 
 /**
@@ -505,8 +505,8 @@ function CharacterAppearanceXOffset(C, HeightRatio) {
  * @param {number} HeightRatio - The character's height ratio
  * @returns {number} - The amounnt to move the character along the Y co-ordinate
  */
-function CharacterAppearanceYOffset(C, HeightRatio) {
-	return 1000 * (1 - HeightRatio) * C.HeightRatioProportion - C.HeightModifier * HeightRatio;
+function CharacterAppearanceYOffset(C) {
+	return 1000 * (1 - C.HeightRatio) * C.HeightRatioProportion - C.HeightModifier * C.HeightRatio;
 }
 
 /**

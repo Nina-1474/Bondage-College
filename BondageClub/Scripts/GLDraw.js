@@ -22,7 +22,7 @@ window.addEventListener('load', GLDrawLoad);
 function GLDrawLoad() {
     GLDrawCanvas = document.createElement("canvas");
     GLDrawCanvas.width = 1000;
-    GLDrawCanvas.height = CanvasDrawHeight;
+	GLDrawCanvas.height = 1000;
     GLVersion = "webgl2";
     var gl = GLDrawCanvas.getContext(GLVersion);
     if (!gl) { GLVersion = "webgl"; gl = GLDrawCanvas.getContext(GLVersion); }
@@ -76,7 +76,7 @@ function GLDrawInitCharacterCanvas(canvas) {
     if (canvas == null) {
         canvas = document.createElement("canvas");
         canvas.width = 1000;
-        canvas.height = CanvasDrawHeight;
+		canvas.height = 1000;
     }
     if (canvas.GL == null) {
         canvas.GL = canvas.getContext(GLVersion);
@@ -85,7 +85,7 @@ function GLDrawInitCharacterCanvas(canvas) {
             return GLDrawInitCharacterCanvas(null);
         }
     } else {
-        GLDrawClearRect(canvas.GL, 0, 0, 1000, CanvasDrawHeight);
+		GLDrawClearRect(canvas.GL, 0, 0, 1000, 1000);
     }
     if (canvas.GL.program == null) {
         GLDrawMakeGLProgam(canvas.GL);
@@ -248,7 +248,7 @@ function GLDrawCreateProgram(gl, vertexShader, fragmentShader) {
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  * @returns {void} - Nothing
  */
-function GLDrawImageBlink(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) { GLDrawImage(url, gl, dstX, dstY, 500, color, fullAlpha, alphaMasks); }
+function GLDrawImageBlink(url, gl, dstX, dstY, zoom, color, fullAlpha, alphaMasks) { GLDrawImage(url, gl, dstX, dstY, zoom, 500, color, fullAlpha, alphaMasks); }
 /**
  * Draws an image from a given url to a WebGLRenderingContext
  * @param {string} url - URL of the image to render
@@ -261,10 +261,10 @@ function GLDrawImageBlink(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) { G
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  * @returns {void} - Nothing
  */
-function GLDrawImage(url, gl, dstX, dstY, offsetX, color, fullAlpha, alphaMasks) {
+function GLDrawImage(url, gl, dstX, dstY, zoom, offsetX, color, fullAlpha, alphaMasks) {
     offsetX = offsetX || 0;
     var tex = GLDrawLoadImage(gl, url);
-    var mask = GLDrawLoadMask(gl, tex.width, tex.height, dstX, dstY, alphaMasks);
+	var mask = GLDrawLoadMask(gl, tex.width * zoom, tex.height * zoom, dstX, dstY, alphaMasks);
 
     var program = (color == null) ? gl.program : (fullAlpha ? gl.programFull : gl.programHalf);
 
@@ -282,7 +282,7 @@ function GLDrawImage(url, gl, dstX, dstY, offsetX, color, fullAlpha, alphaMasks)
 
     var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
     matrix = m4.translate(matrix, dstX + offsetX, dstY, 0);
-    matrix = m4.scale(matrix, tex.width, tex.height, 1);
+    matrix = m4.scale(matrix, tex.width * zoom, tex.height * zoom, 1);
 
     gl.uniformMatrix4fv(program.u_matrix, false, matrix);
     gl.uniform1i(program.u_texture, 0);
@@ -306,7 +306,7 @@ function GLDrawImage(url, gl, dstX, dstY, offsetX, color, fullAlpha, alphaMasks)
  * @param {number} Y - Position of the image on the Y axis
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  */
-function GLDraw2DCanvasBlink(gl, Img, X, Y, alphaMasks) { GLDraw2DCanvas(gl, Img, X + 500, Y, 500,  alphaMasks); }
+function GLDraw2DCanvasBlink(gl, Img, X, Y, zoom, alphaMasks) { GLDraw2DCanvas(gl, Img, X + 500, Y, zoom, 500,  alphaMasks); }
 /**
  * Draws a canvas on the WebGL canvas
  * @param {WebGLRenderingContext} gl - WebGL context
@@ -315,11 +315,11 @@ function GLDraw2DCanvasBlink(gl, Img, X, Y, alphaMasks) { GLDraw2DCanvas(gl, Img
  * @param {number} Y - Position of the image on the Y axis
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  */
-function GLDraw2DCanvas(gl, Img, X, Y, alphaMasks) { 
+function GLDraw2DCanvas(gl, Img, X, Y, zoom, alphaMasks) { 
     var TempCanvasName = Img.getAttribute("name");
     gl.textureCache.delete(TempCanvasName);
     GLDrawImageCache.set(TempCanvasName, Img);
-    GLDrawImage(TempCanvasName, gl, X, Y, 0, null, null, alphaMasks);
+    GLDrawImage(TempCanvasName, gl, X, Y, zoom, 0, null, null, alphaMasks);
 }
 
 /**
@@ -354,7 +354,7 @@ function GLDrawLoadImage(gl, url) {
         gl.textureCache.set(url, textureInfo);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 
         var Img = GLDrawImageCache.get(url);
 
@@ -468,17 +468,17 @@ function GLDrawHexToRGBA(color) {
  * @returns {void} - Nothing 
  */
 function GLDrawAppearanceBuild(C) {
-    GLDrawClearRect(GLDrawCanvas.GL, 0, 0, 1000, CanvasDrawHeight);
+	GLDrawClearRect(GLDrawCanvas.GL, 0, 0, 1000, 1000);
     CommonDrawCanvasPrepare(C);
     CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => GLDrawClearRect(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
 		clearRectBlink: (x, y, w, h) => GLDrawClearRectBlink(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
-		drawImage: (src, x, y, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, 0, null, null, alphaMasks),
-		drawImageBlink: (src, x, y, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, null, null, alphaMasks),
-		drawImageColorize: (src, x, y, color, fullAlpha, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, 0, color, fullAlpha, alphaMasks),
-		drawImageColorizeBlink: (src, x, y, color, fullAlpha, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, color, fullAlpha, alphaMasks),
-		drawCanvas: (Img, x, y, alphaMasks) => GLDraw2DCanvas(GLDrawCanvas.GL, Img, x, y, alphaMasks),
-		drawCanvasBlink: (Img, x, y, alphaMasks) => GLDraw2DCanvasBlink(GLDrawCanvas.GL, Img, x, y, alphaMasks),
+		drawImage: (src, x, y, zoom, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, zoom, 0, null, null, alphaMasks),
+		drawImageBlink: (src, x, y, zoom, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, zoom, null, null, alphaMasks),
+		drawImageColorize: (src, x, y, zoom, color, fullAlpha, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, zoom, 0, color, fullAlpha, alphaMasks),
+		drawImageColorizeBlink: (src, x, y, zoom, color, fullAlpha, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, zoom, color, fullAlpha, alphaMasks),
+		drawCanvas: (Img, x, y, zoom, alphaMasks) => GLDraw2DCanvas(GLDrawCanvas.GL, Img, x, y, zoom, alphaMasks),
+		drawCanvasBlink: (Img, x, y, zoom, alphaMasks) => GLDraw2DCanvasBlink(GLDrawCanvas.GL, Img, x, y, zoom, alphaMasks),
 	});
     C.Canvas.getContext("2d").drawImage(GLDrawCanvas, 0, 0);
     C.CanvasBlink.getContext("2d").drawImage(GLDrawCanvas, -500, 0);
