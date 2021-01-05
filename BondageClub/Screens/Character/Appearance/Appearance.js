@@ -407,12 +407,27 @@ function CharacterAppearanceSetHeightModifiers(C) {
 		let Height = 0;
 		let HeightRatioProportion = 1;
 
-		// Adjust the height based on modifiers on the assets
-		for (let A = 0; A < C.Appearance.length; A++)
-			if (CharacterAppearanceVisible(C, C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name)) {
-				if (C.Appearance[A].Property && C.Appearance[A].Property.HeightModifier != null) Height += C.Appearance[A].Property.HeightModifier;
-				else Height += C.Appearance[A].Asset.HeightModifier;
-			}
+		// Check if there is any setting to override the standard asset height modifiers
+		let HeightOverrides = [];
+		let PoseOverrides = Pose.filter(P => C.Pose != null && C.Pose.indexOf(P.Name) >= 0 && P.OverrideHeight != null).map(P => P.OverrideHeight);
+		let AssetOverrides = C.Appearance.filter(A => A.Asset.OverrideHeight != null).map(A => A.Asset.OverrideHeight);
+		let PropertyOverrides = C.Appearance.filter(A => A.Property && A.Property.OverrideHeight != null).map(A => A.Property.OverrideHeight);
+		HeightOverrides = HeightOverrides.concat(PoseOverrides, AssetOverrides, PropertyOverrides);
+
+		if (HeightOverrides.length > 0) {
+			// Use the override with highest priority
+			let TopOverride = HeightOverrides.reduce((a, b) => a.Priority >= b.Priority ? a : b);
+			Height = TopOverride.Height || 0;
+			if (TopOverride.HeightRatioProportion != null) HeightRatioProportion = TopOverride.HeightRatioProportion;
+		}
+		else {
+			// Adjust the height based on modifiers on the assets
+			for (let A = 0; A < C.Appearance.length; A++)
+				if (CharacterAppearanceVisible(C, C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name)) {
+					if (C.Appearance[A].Property && C.Appearance[A].Property.HeightModifier != null) Height += C.Appearance[A].Property.HeightModifier;
+					else Height += C.Appearance[A].Asset.HeightModifier;
+				}
+		}
 		
 		// Limit values affectable by Property settings in case invalid values were set via console
 		if (Height > CanvasLowerOverflow) Height = CanvasLowerOverflow;
