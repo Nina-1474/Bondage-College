@@ -376,7 +376,7 @@ function DialogLeave() {
 	if (CurrentCharacter) {
 		if (CharacterAppearanceForceUpCharacter == CurrentCharacter.MemberNumber) {
 			CharacterAppearanceForceUpCharacter = 0;
-			CharacterApperanceSetHeightModifier(CurrentCharacter);
+			CharacterLoadCanvas(CurrentCharacter);
 		}
 		CurrentCharacter.FocusGroup = null;
 	}
@@ -1215,7 +1215,7 @@ function DialogClick() {
 	// If the user clicked the Up button, move the character up to the top of the screen
 	if ((CurrentCharacter.HeightModifier < -90) && (CurrentCharacter.FocusGroup != null) && (MouseX >= 510) && (MouseX < 600) && (MouseY >= 25) && (MouseY < 115)) {
 		CharacterAppearanceForceUpCharacter = CurrentCharacter.MemberNumber;
-		CurrentCharacter.HeightModifier = 0;
+		CharacterLoadCanvas(CurrentCharacter);
 		return;
 	}
 
@@ -1247,7 +1247,7 @@ function DialogClick() {
 	// If the user clicked anywhere outside the current character item zones, ensure the position is corrected
 	if (CharacterAppearanceForceUpCharacter == CurrentCharacter.MemberNumber && ((MouseX < 500) || (MouseX > 1000) || (CurrentCharacter.FocusGroup == null))) {
 		CharacterAppearanceForceUpCharacter = 0;
-		CharacterAppearanceSetHeightModifiers(CurrentCharacter);
+		CharacterLoadCanvas(CurrentCharacter);
 	}
 
 	// In activity mode, we check if the user clicked on an activity box
@@ -1621,7 +1621,7 @@ function DialogDrawItemMenu(C) {
 			// Reset the the character's position
 			if (CharacterAppearanceForceUpCharacter == C.MemberNumber) {
 				CharacterAppearanceForceUpCharacter = 0;
-				CharacterAppearanceSetHeightModifiers(C);
+				CharacterLoadCanvas(C);
 			}
 
 			// Rebuilds the menu
