@@ -214,10 +214,9 @@ function DrawArousalMeter(C, X, Y, Zoom) {
  * @param {number} X - Position of the character on the X axis
  * @param {number} Y - Position of the character on the Y axis
  * @param {number} Zoom - Zoom factor
- * @param {boolean} IsHeightResizeAllowed - Whether or not the settings allow for the height modifier to be applied
  * @returns {void} - Nothing
  */
-function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
+function DrawCharacter(C, X, Y, Zoom) {
 	if ((C != null) && ((C.ID == 0) || (Player.GetBlindLevel() < 3) || (CurrentScreen == "InformationSheet"))) {
 
 		// If there's a fixed image to draw instead of the character
@@ -228,7 +227,7 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 
 		// Shortcuts drawing the character to 3D if needed
 		if (Draw3DEnabled) {
-			Draw3DCharacter(C, X, Y, Zoom, IsHeightResizeAllowed);
+			Draw3DCharacter(C, X, Y, Zoom);
 			return;
 		}
 
@@ -325,6 +324,21 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 			}
 
 	}
+}
+
+/**
+ * Display the character at full height with their head at the top-left, by reversing the zooming and offsets from CommonDrawAppearanceBuild
+ * @param {Character} C - Character to draw
+ * @param {number} X - Position of the character on the X axis
+ * @param {number} Y - Position of the character on the Y axis
+ * @param {number} Zoom - Zoom factor
+ * @returns {void} - Nothing
+ */
+function DrawCharacterFullHeight(C, X, Y, Zoom) {
+	let XOffset = CharacterAppearanceXOffset(C);
+	let YOffset = CharacterAppearanceYOffset(C);
+	let AdjZoom = Zoom / C.HeightRatio;
+	DrawCharacter(C, X - XOffset * AdjZoom, Y - YOffset * AdjZoom, AdjZoom);
 }
 
 /**

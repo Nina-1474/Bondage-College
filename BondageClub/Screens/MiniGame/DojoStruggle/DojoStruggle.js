@@ -23,7 +23,7 @@ function DojoStruggleLoad() {
 function DojoStruggleRun() {
 
 	// Draw the character
-	DrawCharacter(Player, 850, -400, 3, false);
+	DrawCharacterFullHeight(Player, 850, -400, 3);
 	MiniGameTimer = MiniGameTimer + Math.round(TimerRunInterval);
 
 	// Draw the check boxes to show the number of tries

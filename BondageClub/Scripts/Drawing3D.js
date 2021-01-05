@@ -99,7 +99,7 @@ function Draw3DProcess() {
 	}
 }
 
-function Draw3DCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
+function Draw3DCharacter(C, X, Y, Zoom) {
 	camera.position.set(0, 80, 300);
 }
 

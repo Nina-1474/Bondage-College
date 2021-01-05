@@ -885,7 +885,7 @@ function PreferenceSubscreenOnlineRun() {
 function PreferenceSubscreenArousalRun() {
 
 	// Draws the main labels and player
-	DrawCharacter(Player, 50, 50, 0.9, false);
+	DrawCharacterFullHeight(Player, 50, 50, 0.9);
 	MainCanvas.textAlign = "left";
 	DrawText(TextGet("ArousalPreferences"), 550, 125, "Black", "Gray");
 	DrawText(TextGet("ArousalActive"), 550, 225, "Black", "Gray");
