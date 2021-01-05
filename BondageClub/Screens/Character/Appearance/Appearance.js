@@ -19,6 +19,10 @@ var CharacterAppearancePreviousEmoticon = "";
 var CharacterAppearanceMode = "";
 var CharacterAppearanceCloth = null;
 
+const CanvasUpperOverflow = 600;
+const CanvasLowerOverflow = 150;
+const CanvasDrawHeight = 1000 + CanvasUpperOverflow + CanvasLowerOverflow;
+
 /**
  * Builds all the assets that can be used to dress up the character
  * @param {Character} C - The character whose appearance is modified
@@ -390,30 +394,39 @@ function CharacterAppearanceItemIsHidden(AssetName, GroupName) {
 }
 
 /**
- * Calculates and sets the height modifier which determines the character's vertical position on screen
- * @param {Character} C - The character whose height must be calculated
+ * Calculates and sets the height modifier which affects the character's vertical position on screen
+ * @param {Character} C - The character whose height modifier must be calculated
  * @returns {void} - Nothing
  */
-function CharacterApperanceSetHeightModifier(C) {
+function CharacterAppearanceSetHeightModifiers(C) {
 	if (CharacterAppearanceForceUpCharacter == C.MemberNumber) {
+		// If the "Up" button was clicked, move the character to the top
 		C.HeightModifier = 0;
+		C.HeightRatioProportion = 1;
 	} else {
-		var Height = 0;
+		let Height = 0;
+		let HeightRatioProportion = 1;
+
+		// Adjust the height based on modifiers on the assets
 		for (let A = 0; A < C.Appearance.length; A++)
-			if (CharacterAppearanceVisible(C, C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name))
-				Height += C.Appearance[A].Asset.HeightModifier;
-		if (C.Pose != null) 
-			for (let A = 0; A < C.Pose.length; A++)
-				for (let P = 0; P < Pose.length; P++)
-					if (Pose[P].Name === C.Pose[A])
-						if (Pose[P].OverrideHeight != null) {
-							// Ignore kneel, if player is hogtied. Allows the use of a short chain on hogtied players
-							// Ignore overthehead if kneeling
-							if (!((Pose[P].Name == "Kneel") && (C.Pose.indexOf("Hogtied") >= 0)) && !((Pose[P].Name == "OverTheHead") && (C.Pose.indexOf("Kneel") >= 0)))
-								Height = Pose[P].OverrideHeight;
-						}
+			if (CharacterAppearanceVisible(C, C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name)) {
+				if (C.Appearance[A].Property && C.Appearance[A].Property.HeightModifier != null) Height += C.Appearance[A].Property.HeightModifier;
+				else Height += C.Appearance[A].Asset.HeightModifier;
+			}
+		
+		// Limit values affectable by Property settings in case invalid values were set via console
+		if (Height > CanvasLowerOverflow) Height = CanvasLowerOverflow;
+		if (Height < -CanvasUpperOverflow) Height = -CanvasUpperOverflow;
+		if (HeightRatioProportion > 1) HeightRatioProportion = 1;
+		if (HeightRatioProportion < 0) HeightRatioProportion = 0;
+
+		// Set the final modifier values for the character
 		C.HeightModifier = Height;
+		C.HeightRatioProportion = HeightRatioProportion;
 	}
+
+	// Set the height ratio here to avoid lookin it up when drawing. The setting can make all characters full height
+	C.HeightRatio = Player.VisualSettings && Player.VisualSettings.ForceFullHeight ? 1 : CharacterAppearanceGetCurrentValue(C, "Height", "Zoom");
 }
 
 /**
@@ -458,6 +471,27 @@ function CharacterAppearanceGetCurrentValue(C, Group, Type) {
 		}
 	return "None";
 
+}
+
+/**
+ * Repositions the character horizonally to centre them, since shorter characters will shrink towards the left
+ * @param {Character} C - The character to reposition
+ * @param {number} HeightRatio - The character's height ratio
+ * @returns {number} - The amount to move the character along the X co-ordinate
+ */
+function CharacterAppearanceXOffset(C, HeightRatio) {
+	return 500 * (1 - HeightRatio) / 2;
+}
+
+/**
+ * Repositions the character vertically towards the bottom of the canvas (the 'floor'), since shorter characters will be shrunk towards the top
+ * HeightRatioProportion controls how much of this offset applies with 1 (max) positioning them on the "floor" and 0 (min) leaving them up at the 'ceiling'
+ * @param {Character} C - The character to reposition
+ * @param {number} HeightRatio - The character's height ratio
+ * @returns {number} - The amounnt to move the character along the Y co-ordinate
+ */
+function CharacterAppearanceYOffset(C, HeightRatio) {
+	return 1000 * (1 - HeightRatio) * C.HeightRatioProportion - C.HeightModifier * HeightRatio;
 }
 
 /**

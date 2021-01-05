@@ -1229,11 +1229,8 @@ function DialogClick() {
 		DialogLeaveItemMenu();
 		DialogLeaveFocusItem();
 		var C = (MouseX < 500) ? Player : CurrentCharacter;
-		var X = (MouseX < 500) ? 0 : 500;
-		var HeightRatio = CharacterAppearanceGetCurrentValue(C, "Height", "Zoom");
-		if ((Player != null) && (Player.VisualSettings != null) && (Player.VisualSettings.ForceFullHeight != null) && Player.VisualSettings.ForceFullHeight) HeightRatio = 1.0;
-		var XOffset = 500 * (1 - HeightRatio) / 2;
-		var YOffset = ((C.Pose.indexOf("Suspension") < 0) && (C.Pose.indexOf("SuspensionHogtied") < 0)) ? 1000 * (1 - HeightRatio) : 0;
+		let X = CharacterAppearanceXOffset(C, C.HeightRatio) + (MouseX < 500 ? 0 : 500);
+		let Y = CharacterAppearanceYOffset(C, C.HeightRatio);
 		for (let A = 0; A < AssetGroup.length; A++)
 			if ((AssetGroup[A].Category == "Item") && (AssetGroup[A].Zone != null))
 				for (let Z = 0; Z < AssetGroup[A].Zone.length; Z++)
@@ -1251,7 +1248,7 @@ function DialogClick() {
 	// If the user clicked anywhere outside the current character item zones, ensure the position is corrected
 	if (CharacterAppearanceForceUpCharacter == CurrentCharacter.MemberNumber && ((MouseX < 500) || (MouseX > 1000) || (CurrentCharacter.FocusGroup == null))) {
 		CharacterAppearanceForceUpCharacter = 0;
-		CharacterApperanceSetHeightModifier(CurrentCharacter);
+		CharacterAppearanceSetHeightModifiers(CurrentCharacter);
 	}
 
 	// In activity mode, we check if the user clicked on an activity box
@@ -1608,7 +1605,7 @@ function DialogDrawItemMenu(C) {
 			// Reset the the character's position
 			if (CharacterAppearanceForceUpCharacter == C.MemberNumber) {
 				CharacterAppearanceForceUpCharacter = 0;
-				CharacterApperanceSetHeightModifier(C);
+				CharacterAppearanceSetHeightModifiers(C);
 			}
 
 			// Rebuilds the menu
