@@ -1234,8 +1234,7 @@ function DialogClick() {
 		for (let A = 0; A < AssetGroup.length; A++)
 			if ((AssetGroup[A].Category == "Item") && (AssetGroup[A].Zone != null))
 				for (let Z = 0; Z < AssetGroup[A].Zone.length; Z++)
-					if (((C.Pose.indexOf("Suspension") < 0) && (MouseX - X >= ((AssetGroup[A].Zone[Z][0] * HeightRatio) + XOffset)) && (MouseY >= (((AssetGroup[A].Zone[Z][1] - C.HeightModifier) * HeightRatio) + YOffset)) && (MouseX - X <= (((AssetGroup[A].Zone[Z][0] + AssetGroup[A].Zone[Z][2]) * HeightRatio) + XOffset)) && (MouseY <= (((AssetGroup[A].Zone[Z][1] + AssetGroup[A].Zone[Z][3] - C.HeightModifier) * HeightRatio) + YOffset)))
-						|| ((C.Pose.indexOf("Suspension") >= 0) && (MouseX - X >= ((AssetGroup[A].Zone[Z][0] * HeightRatio) + XOffset)) && (MouseY >= HeightRatio * ((1000 - (AssetGroup[A].Zone[Z][1] + AssetGroup[A].Zone[Z][3])) - C.HeightModifier)) && (MouseX - X <= (((AssetGroup[A].Zone[Z][0] + AssetGroup[A].Zone[Z][2]) * HeightRatio) + XOffset)) && (MouseY <= HeightRatio * (1000 - ((AssetGroup[A].Zone[Z][1])) - C.HeightModifier)))) {
+					if (DialogClickedInZone(C, AssetGroup[A].Zone[Z], C.HeightRatio, X, Y)) {
 						C.FocusGroup = AssetGroup[A];
 						DialogItemToLock = null;
 						DialogFocusItem = null;
@@ -1364,6 +1363,23 @@ function DialogClick() {
 			DialogSelfMenuSelected.Click();
 	}
 
+}
+
+/**
+ * Returns whether the clicked co-ordinates are inside the asset zone
+ * @param {Character} C - The character the click is on
+ * @param {Array} Zone - The 4 part array of the rectangular asset zone on the character's body: [X, Y, Width, Height]
+ * @param {number} X - The X co-ordinate of the click
+ * @param {number} Y - The Y co-ordinate of the click
+ * @param {number} Zoom - The amount the character has been zoomed
+ * @returns {boolean} - If TRUE the click is inside the zone
+ */
+function DialogClickedInZone(C, Zone, Zoom, X, Y) {
+	let Left = X + Zone[0] * Zoom;
+	let Top = C.Pose.indexOf("Suspension") >= 0 ? 1000 - (Y + (Zone[1] + Zone[3]) * Zoom) : Y + Zone[1] * Zoom;
+	let Width = Zone[2] * Zoom;
+	let Height = Zone[3] * Zoom;
+	return MouseIn(Left, Top, Width, Height);
 }
 
 /**

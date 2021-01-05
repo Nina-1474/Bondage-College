@@ -337,37 +337,24 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
  * Draws an asset group zone outline over the character
  * @param {Character} C - Character for which to draw the zone
  * @param {number[][]} Zone - Zone to be drawn
- * @param {number} HeightRatio - Height ratio of the character
+ * @param {number} Zoom - Height ratio of the character
  * @param {number} X - Position of the character on the X axis
  * @param {number} Y - Position of the character on the Y axis
  * @param {string} Color - Color of the zone outline
  * @param {number} [Thickness=3] - Thickness of the outline
+ * @param {string} FillColor - If non-empty, the color to fill the rectangle with
  * @returns {void} - Nothing
  */
-function DrawAssetGroupZone(C, Zone, HeightRatio, X, Y, Color, Thickness = 3) {
-	for (let Z = 0; Z < Zone.length; Z++)
-		if (C.Pose.indexOf("Suspension") >= 0)
-			DrawEmptyRect((HeightRatio * Zone[Z][0]) + X, (1000 - (HeightRatio * (Zone[Z][1] + Y + Zone[Z][3]))) - C.HeightModifier, (HeightRatio * Zone[Z][2]), (HeightRatio * Zone[Z][3]), Color, Thickness);
-		else
-			DrawEmptyRect((HeightRatio * Zone[Z][0]) + X, HeightRatio * (Zone[Z][1] - C.HeightModifier) + Y, (HeightRatio * Zone[Z][2]), (HeightRatio * Zone[Z][3]), Color, Thickness);
-}
+function DrawAssetGroupZone(C, Zone, Zoom, X, Y, Color, Thickness = 3, FillColor) {
+	for (let Z = 0; Z < Zone.length; Z++) {
+		let Left = X + Zone[Z][0] * Zoom;
+		let Top = C.Pose.indexOf("Suspension") >= 0 ? 1000 - (Y + (Zone[Z][1] + Zone[Z][3]) * Zoom) : Y + Zone[Z][1] * Zoom;
+		let Width = Zone[Z][2] * Zoom;
+		let Height = Zone[Z][3] * Zoom;
 
-/**
- * Draws an asset group zone background over the character
- * @param {Character} C - Character for which to draw the zone
- * @param {number[][]} Zone - Zone to be drawn
- * @param {number} HeightRatio - Height ratio of the character
- * @param {number} X - Position of the character on the X axis
- * @param {number} Y - Position of the character on the Y axis
- * @param {string} Color - Color of the zone background
- * @returns {void} - Nothing
- */
-function DrawAssetGroupZoneBackground(C, Zone, HeightRatio, X, Y, Color) {
-	for (let Z = 0; Z < Zone.length; Z++)
-		if (C.Pose.indexOf("Suspension") >= 0)
-			DrawRect((HeightRatio * Zone[Z][0]) + X, (1000 - (HeightRatio * (Zone[Z][1] + Y + Zone[Z][3]))) - C.HeightModifier, (HeightRatio * Zone[Z][2]), (HeightRatio * Zone[Z][3]), Color);
-		else
-			DrawRect((HeightRatio * Zone[Z][0]) + X, HeightRatio * (Zone[Z][1] - C.HeightModifier) + Y, (HeightRatio * Zone[Z][2]), (HeightRatio * Zone[Z][3]), Color);
+		if (FillColor != null) DrawRect(Left, Top, Width, Height, FillColor);
+		DrawEmptyRect(Left, Top, Width, Height, Color, Thickness);
+	}
 }
 
 /**
