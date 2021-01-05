@@ -163,6 +163,7 @@ function AssetAdd(NewAsset) {
 		AllowColorizeAll: typeof NewAsset.AllowColorizeAll === 'boolean' ? NewAsset.AllowColorizeAll : true,
 		AvailableLocations: NewAsset.AvailableLocations || [],
 		OverrideHeight: NewAsset.OverrideHeight,
+		FixedSize: NewAsset.FixedSize || false,
 	}
 	A.Layer = AssetBuildLayer(NewAsset, A);
 	AssetAssignColorIndices(A);

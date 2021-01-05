@@ -138,17 +138,20 @@ function CommonDrawAppearanceBuild(C, {
 		// Find the X and Y position to draw on
 		var X = Layer.DrawingLeft != null ? Layer.DrawingLeft : (A.DrawingLeft != null ? A.DrawingLeft : AG.DrawingLeft);
 		var Y = Layer.DrawingTop != null ? Layer.DrawingTop : (A.DrawingTop != null ? A.DrawingTop : AG.DrawingTop);
-		if (C.Pose && C.Pose.length) {
-			C.Pose.forEach(CP => {
-				var PoseDef = PoseFemale3DCG.find(P => P.Name === CP && P.MovePosition);
-				if (PoseDef) {
-					var MovePosition = PoseDef.MovePosition.find(MP => MP.Group === AG.Name);
-					if (MovePosition) {
-						X += MovePosition.X;
-						Y += MovePosition.Y;
+		if (CA.Asset.FixedSize == false) {
+			// Offset the X and Y based on the pose
+			if (C.Pose && C.Pose.length) {
+				C.Pose.forEach(CP => {
+					var PoseDef = PoseFemale3DCG.find(P => P.Name === CP && P.MovePosition);
+					if (PoseDef) {
+						var MovePosition = PoseDef.MovePosition.find(MP => MP.Group === AG.Name);
+						if (MovePosition) {
+							X += MovePosition.X;
+							Y += MovePosition.Y;
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 
 		// Check if we need to draw a different variation (from type property)
@@ -232,12 +235,14 @@ function CommonDrawAppearanceBuild(C, {
 		}
 
 		// Reduce and offset the co-ordinates to match the character's height
-		X *= C.HeightRatio;
-		Y *= C.HeightRatio;
-		X += XOffset;
-		Y += YOffset;
+		if (CA.Asset.FixedSize == false) {
+			X *= C.HeightRatio;
+			Y *= C.HeightRatio;
+			X += XOffset;
+			Y += YOffset;
+		}
 
-		let Zoom = C.HeightRatio;
+		let Zoom = CA.Asset.FixedSize ? 1 : C.HeightRatio;
 
 		// Make any required changes to the colour
 		if (Color === "Default" && A.DefaultColor) {
