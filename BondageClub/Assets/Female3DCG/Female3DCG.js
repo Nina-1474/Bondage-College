@@ -776,7 +776,6 @@ var AssetFemale3DCG = [
 		Clothing: true,
 		Left: 90,
 		Top: 0,
-		AllowPose: ["Suspension"],
 		PreviewZone: [125, 0, 250, 250],
 		DynamicGroupName: "HairAccessory1",
 		Asset: [
@@ -807,7 +806,6 @@ var AssetFemale3DCG = [
 		Clothing: true,
 		Left: 90,
 		Top: 0,
-		AllowPose: ["Suspension"],
 		PreviewZone: [125, 0, 250, 250],
 		Asset: [
 			{ Name: "Ears1", Fetish: ["Pet"], BodyCosplay: true },
@@ -880,7 +878,6 @@ var AssetFemale3DCG = [
 		BodyCosplay: true,
 		Left: 90,
 		Top: 0,
-		AllowPose: ["Suspension"],
 		PreviewZone: [125, 0, 250, 250],
 		DynamicGroupName: "HairAccessory1",
 		Asset: [
