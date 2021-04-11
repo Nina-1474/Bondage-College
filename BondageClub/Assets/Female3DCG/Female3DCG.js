@@ -778,6 +778,7 @@ var AssetFemale3DCG = [
 		Top: 0,
 		AllowPose: ["Suspension"],
 		PreviewZone: [125, 0, 250, 250],
+		DynamicGroupName: "HairAccessory1",
 		Asset: [
 			{ Name: "Ribbons1", Priority: 4, BuyGroup: "Ribbons1" },
 			{ Name: "Ribbons2", Priority: 4, Value: -1, BuyGroup: "Ribbons2" },
@@ -881,6 +882,7 @@ var AssetFemale3DCG = [
 		Top: 0,
 		AllowPose: ["Suspension"],
 		PreviewZone: [125, 0, 250, 250],
+		DynamicGroupName: "HairAccessory1",
 		Asset: [
 			{ Name: "Ears1", Fetish: ["Pet"], BodyCosplay: true },
 			{ Name: "Ears2", Fetish: ["Pet"], BodyCosplay: true },
