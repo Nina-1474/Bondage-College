@@ -76,6 +76,7 @@ function AssetGroupAdd(NewAssetFamily, NewAsset) {
 		InheritColor: NewAsset.InheritColor,
 		FreezeActivePose: Array.isArray(NewAsset.FreezeActivePose) ? NewAsset.FreezeActivePose : [],
 		PreviewZone: NewAsset.PreviewZone,
+		DynamicGroupName: NewAsset.DynamicGroupName || NewAsset.Group,
 	}
 	AssetGroup.push(A);
 	AssetCurrentGroup = A;
@@ -160,7 +161,7 @@ function AssetAdd(NewAsset, ExtendedConfig) {
 		DynamicAllowInventoryAdd: (typeof NewAsset.DynamicAllowInventoryAdd === 'function') ? NewAsset.DynamicAllowInventoryAdd : function () { return true },
 		DynamicExpressionTrigger: (typeof NewAsset.DynamicExpressionTrigger === 'function') ? NewAsset.DynamicExpressionTrigger : function () { return this.ExpressionTrigger },
 		DynamicName: (typeof NewAsset.DynamicName === 'function') ? NewAsset.DynamicName : function () { return this.Name },
-		DynamicGroupName: (NewAsset.DynamicGroupName || AssetCurrentGroup.Name),
+		DynamicGroupName: (NewAsset.DynamicGroupName || AssetCurrentGroup.DynamicGroupName),
 		DynamicActivity: (typeof NewAsset.DynamicActivity === 'function') ? NewAsset.DynamicActivity : function () { return NewAsset.Activity },
 		DynamicAudio: (typeof NewAsset.DynamicAudio === 'function') ? NewAsset.DynamicAudio : null,
 		CharacterRestricted: typeof NewAsset.CharacterRestricted === 'boolean' ? NewAsset.CharacterRestricted : false,
