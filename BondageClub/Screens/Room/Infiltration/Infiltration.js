@@ -3,7 +3,6 @@ var InfiltrationBackground = "Infiltration";
 var InfiltrationSupervisor = null;
 var InfiltrationDifficulty = 0;
 var InfiltrationMission = "";
-//var InfiltrationMissionType = ["Rescue", "Kidnap", "Retrieve", "Steal"];
 var InfiltrationMissionType = ["Rescue", "Kidnap", "Retrieve"];
 var InfiltrationObjectType = ["USBKey", "BDSMPainting", "GoldCollar", "GeneralLedger", "SilverVibrator", "DiamondRing", "SignedPhoto"];
 var InfiltrationTarget = {};
@@ -122,5 +121,7 @@ function InfiltrationReturnMission() {
  */
 function InfiltrationCompleteMission() {
 	SkillProgress("Infiltration", 60);
-	CharacterChangeMoney(Player, 15);
+	let Money = 15;
+	if (InfiltrationPerksActive("Negotiation")) Money = Math.round(Money * 1.2);
+	CharacterChangeMoney(Player, Money);
 }
