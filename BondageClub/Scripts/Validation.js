@@ -14,7 +14,8 @@ const ValidationRestrictedLockProperties = ["EnableRandomInput", "RemoveItem", "
 const ValidationTimerLockProperties = ["MemberNumberList", "RemoveTimer"];
 const ValidationAllLockProperties = ValidationBasicLockProperties
 	.concat(ValidationRestrictedLockProperties)
-	.concat(ValidationTimerLockProperties);
+	.concat(ValidationTimerLockProperties)
+	.concat(["MemberNumberListKeys"]);
 const ValidationModifiableProperties = ValidationAllLockProperties.concat(["Expression"]);
 
 /**
