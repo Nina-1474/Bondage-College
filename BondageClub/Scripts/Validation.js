@@ -7,7 +7,7 @@ const ValidationDefaultCombinationNumber = "0000";
 const ValidationDefaultPassword = "UNLOCK";
 const ValidationRemoveTimerToleranceMs = 5000;
 const ValidationBasicLockProperties = [
-	"LockedBy", "LockMemberNumber", "CombinationNumber", "MemberNumberListKeys", "Password", "Hint", "LockSet",
+	"LockedBy", "LockMemberNumber", "CombinationNumber", "Password", "Hint", "LockSet",
 	"LockPickSeed",
 ];
 const ValidationRestrictedLockProperties = ["EnableRandomInput", "RemoveItem", "ShowTimer"];
