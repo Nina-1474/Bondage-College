@@ -321,38 +321,38 @@ function PreferenceInitPlayer() {
 	// Controller settings
 	if (!C.ControllerSettings) C.ControllerSettings = {};
 	if (typeof C.ControllerSettings.ControllerSensitivity !== "number") C.ControllerSettings.ControllerSensitivity = 5;
-    if (typeof C.ControllerSettings.ControllerDeadZone !== "number") C.ControllerSettings.ControllerDeadZone = 0.01;
-    if (typeof C.ControllerSettings.ControllerA !== "number") C.ControllerSettings.ControllerA = 1;
-    if (typeof C.ControllerSettings.ControllerB !== "number") C.ControllerSettings.ControllerB = 0;
-    if (typeof C.ControllerSettings.ControllerX !== "number") C.ControllerSettings.ControllerX = 3;
-    if (typeof C.ControllerSettings.ControllerY !== "number") C.ControllerSettings.ControllerY = 2;
-    if (typeof C.ControllerSettings.ControllerStickUpDown !== "number") C.ControllerSettings.ControllerStickUpDown = 1;
-    if (typeof C.ControllerSettings.ControllerStickLeftRight !== "number") C.ControllerSettings.ControllerStickLeftRight = 0;
-    if (typeof C.ControllerSettings.ControllerStickRight !== "number") C.ControllerSettings.ControllerStickRight = 1;
-    if (typeof C.ControllerSettings.ControllerStickDown !== "number") C.ControllerSettings.ControllerStickDown = 1;
-    if (typeof C.ControllerSettings.ControllerDPadUp !== "number") C.ControllerSettings.ControllerDPadUp = 4;
-    if (typeof C.ControllerSettings.ControllerDPadDown !== "number") C.ControllerSettings.ControllerDPadDown = 5;
-    if (typeof C.ControllerSettings.ControllerDPadLeft !== "number") C.ControllerSettings.ControllerDPadLeft = 6;
-    if (typeof C.ControllerSettings.ControllerDPadRight !== "number") C.ControllerSettings.ControllerDPadRight = 7;
-    if (typeof C.ControllerSettings.ControllerActive !== "boolean") C.ControllerSettings.ControllerActive = false;
+	if (typeof C.ControllerSettings.ControllerDeadZone !== "number") C.ControllerSettings.ControllerDeadZone = 0.01;
+	if (typeof C.ControllerSettings.ControllerA !== "number") C.ControllerSettings.ControllerA = 1;
+	if (typeof C.ControllerSettings.ControllerB !== "number") C.ControllerSettings.ControllerB = 0;
+	if (typeof C.ControllerSettings.ControllerX !== "number") C.ControllerSettings.ControllerX = 3;
+	if (typeof C.ControllerSettings.ControllerY !== "number") C.ControllerSettings.ControllerY = 2;
+	if (typeof C.ControllerSettings.ControllerStickUpDown !== "number") C.ControllerSettings.ControllerStickUpDown = 1;
+	if (typeof C.ControllerSettings.ControllerStickLeftRight !== "number") C.ControllerSettings.ControllerStickLeftRight = 0;
+	if (typeof C.ControllerSettings.ControllerStickRight !== "number") C.ControllerSettings.ControllerStickRight = 1;
+	if (typeof C.ControllerSettings.ControllerStickDown !== "number") C.ControllerSettings.ControllerStickDown = 1;
+	if (typeof C.ControllerSettings.ControllerDPadUp !== "number") C.ControllerSettings.ControllerDPadUp = 4;
+	if (typeof C.ControllerSettings.ControllerDPadDown !== "number") C.ControllerSettings.ControllerDPadDown = 5;
+	if (typeof C.ControllerSettings.ControllerDPadLeft !== "number") C.ControllerSettings.ControllerDPadLeft = 6;
+	if (typeof C.ControllerSettings.ControllerDPadRight !== "number") C.ControllerSettings.ControllerDPadRight = 7;
+	if (typeof C.ControllerSettings.ControllerActive !== "boolean") C.ControllerSettings.ControllerActive = false;
 
-    ControllerSensitivity = C.ControllerSettings.ControllerSensitivity;
-    ControllerDeadZone = C.ControllerSettings.ControllerDeadZone;
-    PreferenceSettingsSensitivityIndex = PreferenceSettingsSensitivityList.indexOf(Player.ControllerSettings.ControllerSensitivity);
-    PreferenceSettingsDeadZoneIndex = PreferenceSettingsDeadZoneList.indexOf(Player.ControllerSettings.ControllerDeadZone);
-    ControllerA = C.ControllerSettings.ControllerA;
-    ControllerB = C.ControllerSettings.ControllerB;
-    ControllerX = C.ControllerSettings.ControllerX;
-    ControllerY = C.ControllerSettings.ControllerY;
-    ControllerStickUpDown = C.ControllerSettings.ControllerStickUpDown;
-    ControllerStickLeftRight = C.ControllerSettings.ControllerStickLeftRight;
-    ControllerStickRight = C.ControllerSettings.ControllerStickRight;
-    ControllerStickDown = C.ControllerSettings.ControllerStickDown;
-    ControllerDPadUp = C.ControllerSettings.ControllerDPadUp;
-    ControllerDPadDown = C.ControllerSettings.ControllerDPadDown;
-    ControllerDPadLeft = C.ControllerSettings.ControllerDPadLeft;
-    ControllerDPadRight = C.ControllerSettings.ControllerDPadRight;
-    ControllerActive = C.ControllerSettings.ControllerActive;
+	ControllerSensitivity = C.ControllerSettings.ControllerSensitivity;
+	ControllerDeadZone = C.ControllerSettings.ControllerDeadZone;
+	PreferenceSettingsSensitivityIndex = PreferenceSettingsSensitivityList.indexOf(Player.ControllerSettings.ControllerSensitivity);
+	PreferenceSettingsDeadZoneIndex = PreferenceSettingsDeadZoneList.indexOf(Player.ControllerSettings.ControllerDeadZone);
+	ControllerA = C.ControllerSettings.ControllerA;
+	ControllerB = C.ControllerSettings.ControllerB;
+	ControllerX = C.ControllerSettings.ControllerX;
+	ControllerY = C.ControllerSettings.ControllerY;
+	ControllerStickUpDown = C.ControllerSettings.ControllerStickUpDown;
+	ControllerStickLeftRight = C.ControllerSettings.ControllerStickLeftRight;
+	ControllerStickRight = C.ControllerSettings.ControllerStickRight;
+	ControllerStickDown = C.ControllerSettings.ControllerStickDown;
+	ControllerDPadUp = C.ControllerSettings.ControllerDPadUp;
+	ControllerDPadDown = C.ControllerSettings.ControllerDPadDown;
+	ControllerDPadLeft = C.ControllerSettings.ControllerDPadLeft;
+	ControllerDPadRight = C.ControllerSettings.ControllerDPadRight;
+	ControllerActive = C.ControllerSettings.ControllerActive;
 
 	// Gameplay settings
 	if (!C.GameplaySettings) C.GameplaySettings = {};
@@ -411,7 +411,7 @@ function PreferenceInitPlayer() {
 	}
 
 	// Graphical settings
-	if (!C.GraphicsSettings) C.GraphicsSettings = {}
+	if (!C.GraphicsSettings) C.GraphicsSettings = {};
 	if (typeof C.GraphicsSettings.Font !== "string") C.GraphicsSettings.Font = "Arial";
 	if (typeof C.GraphicsSettings.InvertRoom !== "boolean") C.GraphicsSettings.InvertRoom = true;
 	if (typeof C.GraphicsSettings.StimulationFlashes !== "boolean") C.GraphicsSettings.StimulationFlashes = true;
@@ -483,12 +483,12 @@ function PreferenceInitPlayer() {
 		C.ImmersionSettings.ChatRoomMuffle = true;
 		C.OnlineSharedSettings.AllowPlayerLeashing = true;
 	}
-	
+
 	// Enables the AFK timer for the current player only
 	AfkTimerSetEnabled(C.OnlineSettings.EnableAfkTimer);
 
 	// Sync settings if anything changed
-	const toUpdate = {}
+	const toUpdate = {};
 
 	for (const prop of Object.keys(PrefBefore))
 		if (PrefBefore[prop] !== JSON.stringify(C[prop]))
@@ -546,7 +546,7 @@ function PreferenceLoad() {
 	PreferenceChatEnterLeaveIndex = (PreferenceChatEnterLeaveList.indexOf(Player.ChatSettings.EnterLeave) < 0) ? 0 : PreferenceChatEnterLeaveList.indexOf(Player.ChatSettings.EnterLeave);
 	PreferenceChatMemberNumbersIndex = (PreferenceChatMemberNumbersList.indexOf(Player.ChatSettings.MemberNumbers) < 0) ? 0 : PreferenceChatMemberNumbersList.indexOf(Player.ChatSettings.MemberNumbers);
 	PreferenceSettingsSensDepIndex = (PreferenceSettingsSensDepList.indexOf(Player.GameplaySettings.SensDepChatLog) < 0) ? 0 : PreferenceSettingsSensDepList.indexOf(Player.GameplaySettings.SensDepChatLog);
-    PreferenceSettingsVolumeIndex = (PreferenceSettingsVolumeList.indexOf(Player.AudioSettings.Volume) < 0) ? 0 : PreferenceSettingsVolumeList.indexOf(Player.AudioSettings.Volume);
+	PreferenceSettingsVolumeIndex = (PreferenceSettingsVolumeList.indexOf(Player.AudioSettings.Volume) < 0) ? 0 : PreferenceSettingsVolumeList.indexOf(Player.AudioSettings.Volume);
 	PreferenceArousalActiveIndex = (PreferenceArousalActiveList.indexOf(Player.ArousalSettings.Active) < 0) ? 0 : PreferenceArousalActiveList.indexOf(Player.ArousalSettings.Active);
 	PreferenceSettingsVFXIndex = (PreferenceSettingsVFXList.indexOf(Player.ArousalSettings.VFX) < 0) ? 0 : PreferenceSettingsVFXList.indexOf(Player.ArousalSettings.VFX);
 	PreferenceArousalVisibleIndex = (PreferenceArousalVisibleList.indexOf(Player.ArousalSettings.Visible) < 0) ? 0 : PreferenceArousalVisibleList.indexOf(Player.ArousalSettings.Visible);
@@ -571,8 +571,8 @@ function PreferenceLoad() {
 	PreferenceArousalFetishIndex = 0;
 	PreferenceLoadFetishFactor();
 
-   // Sets the Players text font
-   PreferenceGraphicsFontIndex = (PreferenceGraphicsFontList.indexOf(Player.GraphicsSettings.Font) < 0) ? 0 : PreferenceGraphicsFontList.indexOf(Player.GraphicsSettings.Font);
+	// Sets the Players text font
+	PreferenceGraphicsFontIndex = (PreferenceGraphicsFontList.indexOf(Player.GraphicsSettings.Font) < 0) ? 0 : PreferenceGraphicsFontList.indexOf(Player.GraphicsSettings.Font);
 
 }
 
@@ -594,15 +594,15 @@ function PreferenceRun() {
 	MainCanvas.textAlign = "center";
 
 	// Draw all the buttons to access the submenus
-    for (let A = 0; A < PreferenceSubscreenList.length; A++) {
-        ControllerIgnoreButton = true;
-        DrawButton(500 + 420 * Math.floor(A / 7), 160 + 110 * (A % 7), 400, 90, "", "White", "Icons/" + PreferenceSubscreenList[A] + ".png");
-        ControllerIgnoreButton = false;
-        DrawTextFit(TextGet("Homepage" + PreferenceSubscreenList[A]), 745 + 420 * Math.floor(A / 7), 205 + 110 * (A % 7), 310, "Black");
-        if (ControllerActive == true) {
-            setButton(745 + 420 * Math.floor(A / 7), 205 + 110 * (A % 7));
-        }
-    }
+	for (let A = 0; A < PreferenceSubscreenList.length; A++) {
+		ControllerIgnoreButton = true;
+		DrawButton(500 + 420 * Math.floor(A / 7), 160 + 110 * (A % 7), 400, 90, "", "White", "Icons/" + PreferenceSubscreenList[A] + ".png");
+		ControllerIgnoreButton = false;
+		DrawTextFit(TextGet("Homepage" + PreferenceSubscreenList[A]), 745 + 420 * Math.floor(A / 7), 205 + 110 * (A % 7), 310, "Black");
+		if (ControllerActive == true) {
+			setButton(745 + 420 * Math.floor(A / 7), 205 + 110 * (A % 7));
+		}
+	}
 
 }
 
@@ -722,10 +722,10 @@ function PreferenceSubscreenRestrictionRun() {
  * @returns {void} - Nothing
  */
 function PreferenceClick() {
-    if (ControllerActive == true) {
-        ClearButtons();
-    }
-    // Pass the click into the opened subscreen
+	if (ControllerActive == true) {
+		ClearButtons();
+	}
+	// Pass the click into the opened subscreen
 	if (PreferenceSubscreen != "") return CommonDynamicFunction("PreferenceSubscreen" + PreferenceSubscreen + "Click()");
 
 	// Exit button
@@ -827,7 +827,6 @@ function PreferenceSubscreenRestrictionClick() {
 	if (MouseIn(500, 325, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.BypassStruggle = !Player.RestrictionSettings.BypassStruggle;
 	if (MouseIn(500, 425, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.SlowImmunity = !Player.RestrictionSettings.SlowImmunity;
 	if (MouseIn(500, 525, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.BypassNPCPunishments = !Player.RestrictionSettings.BypassNPCPunishments;
-	
 }
 
 /**
@@ -860,7 +859,7 @@ function PreferenceSubscreenImmersionRun() {
 		DrawCheckbox(500, 752, 64, 64, TextGet("ChatRoomMuffle"), Player.ImmersionSettings.ChatRoomMuffle);
 		DrawCheckbox(500, 832, 64, 64, TextGet("ImmersionLockSetting"), Player.GameplaySettings.ImmersionLockSetting);
 		DrawCheckbox(1300, 192, 64, 64, TextGet("SenseDepMessages"), Player.ImmersionSettings.SenseDepMessages);
-		
+
 		DrawText(TextGet("SensDepSetting"), 800, 228, "Black", "Gray");
 		MainCanvas.textAlign = "center";
 		DrawBackNextButton(500, 192, 250, 64, TextGet(Player.GameplaySettings.SensDepChatLog), "White", "",
@@ -905,16 +904,16 @@ function PreferenceSubscreenImmersionClick() {
 		if (MouseIn(500, 512, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
 			Player.OnlineSharedSettings.AllowPlayerLeashing = !Player.OnlineSharedSettings.AllowPlayerLeashing;
 		if (MouseIn(500, 592, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
-				Player.ImmersionSettings.ReturnToChatRoom = !Player.ImmersionSettings.ReturnToChatRoom;
+			Player.ImmersionSettings.ReturnToChatRoom = !Player.ImmersionSettings.ReturnToChatRoom;
 		if (Player.ImmersionSettings.ReturnToChatRoom && MouseIn(1300, 592, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
-				Player.ImmersionSettings.ReturnToChatRoomAdmin = !Player.ImmersionSettings.ReturnToChatRoomAdmin;
+			Player.ImmersionSettings.ReturnToChatRoomAdmin = !Player.ImmersionSettings.ReturnToChatRoomAdmin;
 		if (MouseIn(1300, 192, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
-				Player.ImmersionSettings.SenseDepMessages = !Player.ImmersionSettings.SenseDepMessages;
+			Player.ImmersionSettings.SenseDepMessages = !Player.ImmersionSettings.SenseDepMessages;
 		if (MouseIn(500, 672, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
-				Player.ImmersionSettings.StimulationEvents = !Player.ImmersionSettings.StimulationEvents;
+			Player.ImmersionSettings.StimulationEvents = !Player.ImmersionSettings.StimulationEvents;
 		if (MouseIn(500, 752, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
-				Player.ImmersionSettings.ChatRoomMuffle = !Player.ImmersionSettings.ChatRoomMuffle;
-			
+			Player.ImmersionSettings.ChatRoomMuffle = !Player.ImmersionSettings.ChatRoomMuffle;
+
 		if (MouseIn(500, 832, 64, 64) && (!Player.GameplaySettings.ImmersionLockSetting || (!Player.IsRestrained())))
 			Player.GameplaySettings.ImmersionLockSetting = !Player.GameplaySettings.ImmersionLockSetting;
 
