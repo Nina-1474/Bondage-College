@@ -749,7 +749,7 @@ function PreferenceClick() {
 function PreferenceSubscreenGeneralClick() {
 
 	// If the user clicks on "Exit"
-	if (MouseIn(1815, 75, 90, 90) && (PreferenceColorPick == "")) PreferenceSubscreenGeneralExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenGeneralExit();
 
 	// If we must change the restrain permission level
 	if ((MouseX >= 500) && (MouseX < 590) && (MouseY >= 280) && (MouseY < 370)) {
@@ -924,30 +924,42 @@ function PreferenceSubscreenImmersionClick() {
 
 /**
  * Is called when the player exits the preference screen. All settings of the preference screen are sent to the server.
- * If the selected color is invalid, the player cannot leave the screen.
+ * If the player is in a subscreen, they exit to the main preferences menu instead.
  * @returns {void} - Nothing
  */
 function PreferenceExit() {
-	const P = {
-		ArousalSettings: Player.ArousalSettings,
-		ChatSettings: Player.ChatSettings,
-		VisualSettings: Player.VisualSettings,
-		AudioSettings: Player.AudioSettings,
-		ControllerSettings: Player.ControllerSettings,
-		GameplaySettings: Player.GameplaySettings,
-		ImmersionSettings: Player.ImmersionSettings,
-		RestrictionSettings: Player.RestrictionSettings,
-		OnlineSettings: Player.OnlineSettings,
-		OnlineSharedSettings: Player.OnlineSharedSettings,
-		GraphicsSettings: Player.GraphicsSettings,
-		NotificationSettings: Player.NotificationSettings,
-		ItemPermission: Player.ItemPermission,
-		LabelColor: Player.LabelColor,
-		LimitedItems: CommonPackItemArray(Player.LimitedItems),
-	};
-	ServerSend("AccountUpdate", P);
-	PreferenceMessage = "";
-	CommonSetScreen("Character", "InformationSheet");
+	if (PreferenceSubscreen !== "") {
+		// Exit the subscreen to the main preferences menu
+		if (typeof window["PreferenceSubscreen" + PreferenceSubscreen + "Exit"] === "function") {
+			window["PreferenceSubscreen" + PreferenceSubscreen + "Exit"]();
+		}
+		else {
+			PreferenceMessage = "";
+			PreferenceSubscreen = "";
+		}
+	} else {
+		// Exit the preference menus
+		const P = {
+			ArousalSettings: Player.ArousalSettings,
+			ChatSettings: Player.ChatSettings,
+			VisualSettings: Player.VisualSettings,
+			AudioSettings: Player.AudioSettings,
+			ControllerSettings: Player.ControllerSettings,
+			GameplaySettings: Player.GameplaySettings,
+			ImmersionSettings: Player.ImmersionSettings,
+			RestrictionSettings: Player.RestrictionSettings,
+			OnlineSettings: Player.OnlineSettings,
+			OnlineSharedSettings: Player.OnlineSharedSettings,
+			GraphicsSettings: Player.GraphicsSettings,
+			NotificationSettings: Player.NotificationSettings,
+			ItemPermission: Player.ItemPermission,
+			LabelColor: Player.LabelColor,
+			LimitedItems: CommonPackItemArray(Player.LimitedItems),
+		};
+		ServerSend("AccountUpdate", P);
+		PreferenceMessage = "";
+		CommonSetScreen("Character", "InformationSheet");
+	}
 }
 
 /**
@@ -1315,11 +1327,8 @@ function PreferenceSubscreenAudioExit() {
  * @returns {void} - Nothing
  */
 function PreferenceSubscreenControllerClick() {
-    if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) {
-        PreferenceSubscreen = "";
-        PreferenceCalibrationStage = 0;
-        Calibrating = false;
-    }
+	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenControllerExit();
+
     if (PreferenceCalibrationStage == 0) {
 
 
@@ -1399,8 +1408,7 @@ function PreferenceSubscreenChatClick() {
 	}
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165) && (PreferenceColorPick == ""))
-		PreferenceSubscreen = "";
+	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenChatExit();
 
 }
 
@@ -1433,10 +1441,7 @@ function PreferenceSubscreenOnlineClick() {
 function PreferenceSubscreenArousalClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) {
-		PreferenceSubscreen = "";
-		Player.FocusGroup = null;
-	}
+	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenArousalExit();
 
 	// Arousal active control
 	if ((MouseX >= 750) && (MouseX < 1200) && (MouseY >= 193) && (MouseY < 257)) {
@@ -1538,11 +1543,7 @@ function PreferenceSubscreenArousalClick() {
 function PreferenceSubscreenSecurityClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) {
-		PreferenceSubscreen = "";
-		ElementRemove("InputEmailOld");
-		ElementRemove("InputEmailNew");
-	}
+	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenSecurityExit();
 
 	// If we must update the email
 	if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 365) && (MouseY < 415)) {
@@ -1738,15 +1739,18 @@ function PreferenceSubscreenGeneralLoad() {
 
 /**
  * Exists the preference screen. Cleans up elements that are not needed anymore
+ * If the selected color is invalid, the player cannot leave the screen.
  * @returns {void} - Nothing
  */
 function PreferenceSubscreenGeneralExit() {
-	if (CommonIsColor(ElementValue("InputCharacterLabelColor"))) {
-		Player.LabelColor = ElementValue("InputCharacterLabelColor");
-		PreferenceMessage = "";
-		ElementRemove("InputCharacterLabelColor");
-		PreferenceSubscreen = "";
-	} else PreferenceMessage = "ErrorInvalidColor";
+	if (PreferenceColorPick == "") {
+		if (CommonIsColor(ElementValue("InputCharacterLabelColor"))) {
+			Player.LabelColor = ElementValue("InputCharacterLabelColor");
+			PreferenceMessage = "";
+			ElementRemove("InputCharacterLabelColor");
+			PreferenceSubscreen = "";
+		} else PreferenceMessage = "ErrorInvalidColor";
+	}
 }
 
 /**
@@ -1886,7 +1890,7 @@ function PreferenceNotificationsDrawSetting(Left, Top, Text, Setting) {
 function PreferenceSubscreenNotificationsClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if (MouseIn(1815, 75, 90, 90)) PreferenceNotificationsExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenNotificationsExit();
 
 	// Checkboxes
 	const NS = Player.NotificationSettings;
@@ -1954,7 +1958,7 @@ function PreferenceNotificationsClickSetting(Left, Top, Setting, EventType) {
  * Exits the preference screen. Resets the test notifications.
  * @returns {void} - Nothing
  */
-function PreferenceNotificationsExit() {
+function PreferenceSubscreenNotificationsExit() {
 
 	//If any of the settings now have audio enabled, enable the AudioSettings setting as well
 	let enableAudio = false;
@@ -1966,4 +1970,49 @@ function PreferenceNotificationsExit() {
 
 	NotificationReset(NotificationEventType.TEST);
 	PreferenceSubscreen = "";
+}
+
+/**
+ * Exits the preference screen
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenControllerExit() {
+	PreferenceSubscreen = "";
+	PreferenceCalibrationStage = 0;
+	Calibrating = false;
+}
+
+/**
+ * Exits the preference screen
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenChatExit() {
+	if (PreferenceColorPick == "") PreferenceSubscreen = "";
+}
+
+/**
+ * Exits the preference screen
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenArousalExit() {
+	PreferenceSubscreen = "";
+	Player.FocusGroup = null;
+}
+
+/**
+ * Exits the preference screen
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenSecurityExit() {
+	PreferenceSubscreen = "";
+	ElementRemove("InputEmailOld");
+	ElementRemove("InputEmailNew");
+}
+
+/**
+ * Exits the preference screen
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenVisibilityExit() {
+	PreferenceVisibilityExit(false);
 }
