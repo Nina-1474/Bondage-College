@@ -752,15 +752,15 @@ function PreferenceSubscreenGeneralClick() {
 	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenGeneralExit();
 
 	// If we must change the restrain permission level
-	if ((MouseX >= 500) && (MouseX < 590) && (MouseY >= 280) && (MouseY < 370)) {
+	if (MouseIn(500, 280, 90, 90)) {
 		Player.ItemPermission++;
 		if (Player.ItemPermission > 5) Player.ItemPermission = 0;
 		if (Player.GetDifficulty() >= 3) LoginExtremeItemSettings();
 	}
 
 	// If we must show/hide/use the color picker
-	if ((MouseX >= 1140) && (MouseX < 1205) && (MouseY >= 187) && (MouseY < 252)) PreferenceColorPick = (PreferenceColorPick != "InputCharacterLabelColor") ? "InputCharacterLabelColor" : "";
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165) && (PreferenceColorPick != "")) PreferenceColorPick = "";
+	if (MouseIn(1140, 187, 65, 65)) PreferenceColorPick = (PreferenceColorPick != "InputCharacterLabelColor") ? "InputCharacterLabelColor" : "";
+	if (MouseIn(1815, 75, 90, 90) && (PreferenceColorPick != "")) PreferenceColorPick = "";
 
 	// Preference check boxes
 	if (MouseIn(500, 402, 64, 64)) Player.VisualSettings.ForceFullHeight = !Player.VisualSettings.ForceFullHeight;
@@ -886,7 +886,7 @@ function PreferenceSubscreenImmersionClick() {
 	if (Player.GetDifficulty() <= 2) {
 
 		// If we must change sens dep settings
-		if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 192) && (MouseY < 256) && (!Player.GameplaySettings.ImmersionLockSetting  || (!Player.IsRestrained()))) {
+		if (MouseIn(500, 192, 250, 64) && (!Player.GameplaySettings.ImmersionLockSetting  || (!Player.IsRestrained()))) {
 			if (MouseX <= 625) PreferenceSettingsSensDepIndex = (PreferenceSettingsSensDepList.length + PreferenceSettingsSensDepIndex - 1) % PreferenceSettingsSensDepList.length;
 			else PreferenceSettingsSensDepIndex = (PreferenceSettingsSensDepIndex + 1) % PreferenceSettingsSensDepList.length;
 			Player.GameplaySettings.SensDepChatLog = PreferenceSettingsSensDepList[PreferenceSettingsSensDepIndex];
@@ -1264,7 +1264,7 @@ function PreferenceSubscreenGraphicsRun() {
  * @returns {void} - Nothing
  */
 function PreferenceSubscreenGraphicsClick() {
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreen = "";
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreen = "";
 	if (MouseIn(500, 212, 250, 64)) {
 		if (MouseX <= 625) PreferenceSettingsVFXIndex = (PreferenceSettingsVFXList.length + PreferenceSettingsVFXIndex - 1) % PreferenceSettingsVFXList.length;
 		else PreferenceSettingsVFXIndex = (PreferenceSettingsVFXIndex + 1) % PreferenceSettingsVFXList.length;
@@ -1288,21 +1288,21 @@ function PreferenceSubscreenGraphicsClick() {
 function PreferenceSubscreenAudioClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenAudioExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenAudioExit();
 
 	// Volume increase/decrease control
-	if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 193) && (MouseY < 257)) {
+	if (MouseIn(500, 193, 250, 64)) {
 		if (MouseX <= 625) PreferenceSettingsVolumeIndex = (PreferenceSettingsVolumeList.length + PreferenceSettingsVolumeIndex - 1) % PreferenceSettingsVolumeList.length;
 		else PreferenceSettingsVolumeIndex = (PreferenceSettingsVolumeIndex + 1) % PreferenceSettingsVolumeList.length;
 		Player.AudioSettings.Volume = PreferenceSettingsVolumeList[PreferenceSettingsVolumeIndex];
 	}
 
 	// Individual audio check-boxes
-	if ((MouseX >= 500) && (MouseX < 564)) {
-		if ((MouseY >= 272) && (MouseY < 336)) Player.AudioSettings.PlayBeeps = !Player.AudioSettings.PlayBeeps;
-		if ((MouseY >= 352) && (MouseY < 416)) Player.AudioSettings.PlayItem = !Player.AudioSettings.PlayItem;
-		if ((MouseY >= 432) && (MouseY < 496)) Player.AudioSettings.PlayItemPlayerOnly = !Player.AudioSettings.PlayItemPlayerOnly;
-		if ((MouseY >= 512) && (MouseY < 576)) Player.AudioSettings.Notifications = !Player.AudioSettings.Notifications;
+	if (MouseXIn(500, 64)) {
+		if (MouseYIn(272, 64)) Player.AudioSettings.PlayBeeps = !Player.AudioSettings.PlayBeeps;
+		if (MouseYIn(352, 64)) Player.AudioSettings.PlayItem = !Player.AudioSettings.PlayItem;
+		if (MouseYIn(432, 64)) Player.AudioSettings.PlayItemPlayerOnly = !Player.AudioSettings.PlayItemPlayerOnly;
+		if (MouseYIn(512, 64)) Player.AudioSettings.Notifications = !Player.AudioSettings.Notifications;
 	}
 }
 
@@ -1327,43 +1327,39 @@ function PreferenceSubscreenAudioExit() {
  * @returns {void} - Nothing
  */
 function PreferenceSubscreenControllerClick() {
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenControllerExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenControllerExit();
 
-    if (PreferenceCalibrationStage == 0) {
+	if (PreferenceCalibrationStage == 0) {
 
+		if (MouseIn(500, 193, 250, 64)) {
+			if (MouseX <= 625) PreferenceSettingsSensitivityIndex = (PreferenceSettingsSensitivityList.length + PreferenceSettingsSensitivityIndex - 1) % PreferenceSettingsSensitivityList.length;
+			else PreferenceSettingsSensitivityIndex = (PreferenceSettingsSensitivityIndex + 1) % PreferenceSettingsSensitivityList.length;
+			Player.ControllerSettings.ControllerSensitivity = PreferenceSettingsSensitivityList[PreferenceSettingsSensitivityIndex];
+			ControllerSensitivity = Player.ControllerSettings.ControllerSensitivity;
+		}
+		if (MouseIn(500, 593, 250, 64)) {
+			if (MouseX <= 625) PreferenceSettingsDeadZoneIndex = (PreferenceSettingsDeadZoneList.length + PreferenceSettingsDeadZoneIndex - 1) % PreferenceSettingsDeadZoneList.length;
+			else PreferenceSettingsDeadZoneIndex = (PreferenceSettingsDeadZoneIndex + 1) % PreferenceSettingsDeadZoneList.length;
+			Player.ControllerSettings.ControllerDeadZone = PreferenceSettingsDeadZoneList[PreferenceSettingsDeadZoneIndex];
+			ControllerDeadZone = Player.ControllerSettings.ControllerDeadZone;
+		}
 
-        if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 193) && (MouseY < 257)) {
-            if (MouseX <= 625) PreferenceSettingsSensitivityIndex = (PreferenceSettingsSensitivityList.length + PreferenceSettingsSensitivityIndex - 1) % PreferenceSettingsSensitivityList.length;
-            else PreferenceSettingsSensitivityIndex = (PreferenceSettingsSensitivityIndex + 1) % PreferenceSettingsSensitivityList.length;
-            Player.ControllerSettings.ControllerSensitivity = PreferenceSettingsSensitivityList[PreferenceSettingsSensitivityIndex];
-            ControllerSensitivity = Player.ControllerSettings.ControllerSensitivity;
-        }
-        if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 593) && (MouseY < 657)) {
-            if (MouseX <= 625) PreferenceSettingsDeadZoneIndex = (PreferenceSettingsDeadZoneList.length + PreferenceSettingsDeadZoneIndex - 1) % PreferenceSettingsDeadZoneList.length;
-            else PreferenceSettingsDeadZoneIndex = (PreferenceSettingsDeadZoneIndex + 1) % PreferenceSettingsDeadZoneList.length;
-            Player.ControllerSettings.ControllerDeadZone = PreferenceSettingsDeadZoneList[PreferenceSettingsDeadZoneIndex];
-            ControllerDeadZone = Player.ControllerSettings.ControllerDeadZone;
-        }
+		if (MouseIn(590, 400, 310, 90)) {
+			PreferenceCalibrationStage = 1;
+			Calibrating = true;
+		}
 
-        if (MouseIn(590, 400, 310, 90)) {
-            //console.log("CalibrateClick")
-            PreferenceCalibrationStage = 1;
-            Calibrating = true;
-        }
-        if (MouseIn(590, 500, 310, 90)) {
-            //console.log("CalibrateClick")
-            PreferenceCalibrationStage = 101;
-            Calibrating = true;
-        }
+		if (MouseIn(590, 500, 310, 90)) {
+			PreferenceCalibrationStage = 101;
+			Calibrating = true;
+		}
 
-        if ((MouseX >= 500) && (MouseX < 564)) {
-            if ((MouseY >= 272) && (MouseY < 336)) {
-                ControllerActive = !ControllerActive;
-                Player.ControllerSettings.ControllerActive = ControllerActive;
-                ClearButtons();
-            }
-        }
-    }
+		if (MouseIn(500, 272, 64, 64)) {
+			ControllerActive = !ControllerActive;
+			Player.ControllerSettings.ControllerActive = ControllerActive;
+			ClearButtons();
+		}
+	}
 }
 
 /**
@@ -1388,19 +1384,19 @@ function PreferenceSubscreenChatClick() {
 	}
 
 	// If the user used one of the BackNextButtons
-	if ((MouseX >= 1000) && (MouseX < 1350) && (MouseY >= 190) && (MouseY < 270)) {
+	if (MouseIn(1000, 190, 350, 80)) {
 		if (MouseX <= 1175) PreferenceChatColorThemeIndex = (PreferenceChatColorThemeIndex <= 0) ? PreferenceChatColorThemeList.length - 1 : PreferenceChatColorThemeIndex - 1;
 		else PreferenceChatColorThemeIndex = (PreferenceChatColorThemeIndex >= PreferenceChatColorThemeList.length - 1) ? 0 : PreferenceChatColorThemeIndex + 1;
 		PreferenceChatColorThemeSelected = PreferenceChatColorThemeList[PreferenceChatColorThemeIndex];
 		Player.ChatSettings.ColorTheme = PreferenceChatColorThemeSelected;
 	}
-	if ((MouseX >= 1000) && (MouseX < 1350) && (MouseY >= 290) && (MouseY < 370)) {
+	if (MouseIn(1000, 290, 350, 80)) {
 		if (MouseX <= 1175) PreferenceChatEnterLeaveIndex = (PreferenceChatEnterLeaveIndex <= 0) ? PreferenceChatEnterLeaveList.length - 1 : PreferenceChatEnterLeaveIndex - 1;
 		else PreferenceChatEnterLeaveIndex = (PreferenceChatEnterLeaveIndex >= PreferenceChatEnterLeaveList.length - 1) ? 0 : PreferenceChatEnterLeaveIndex + 1;
 		PreferenceChatEnterLeaveSelected = PreferenceChatEnterLeaveList[PreferenceChatEnterLeaveIndex];
 		Player.ChatSettings.EnterLeave = PreferenceChatEnterLeaveSelected;
 	}
-	if ((MouseX >= 1000) && (MouseX < 1350) && (MouseY >= 390) && (MouseY < 470)) {
+	if (MouseIn(1000, 390, 350, 80)) {
 		if (MouseX <= 1175) PreferenceChatMemberNumbersIndex = (PreferenceChatMemberNumbersIndex <= 0) ? PreferenceChatMemberNumbersList.length - 1 : PreferenceChatMemberNumbersIndex - 1;
 		else PreferenceChatMemberNumbersIndex = (PreferenceChatMemberNumbersIndex >= PreferenceChatMemberNumbersList.length - 1) ? 0 : PreferenceChatMemberNumbersIndex + 1;
 		PreferenceChatMemberNumbersSelected = PreferenceChatMemberNumbersList[PreferenceChatMemberNumbersIndex];
@@ -1408,7 +1404,7 @@ function PreferenceSubscreenChatClick() {
 	}
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenChatExit();
+	if (MouseIn(1815, 75,90,90)) PreferenceSubscreenChatExit();
 
 }
 
@@ -1441,49 +1437,49 @@ function PreferenceSubscreenOnlineClick() {
 function PreferenceSubscreenArousalClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenArousalExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenArousalExit();
 
 	// Arousal active control
-	if ((MouseX >= 750) && (MouseX < 1200) && (MouseY >= 193) && (MouseY < 257)) {
+	if (MouseIn(750, 193, 450, 64)) {
 		if (MouseX <= 975) PreferenceArousalActiveIndex = (PreferenceArousalActiveList.length + PreferenceArousalActiveIndex - 1) % PreferenceArousalActiveList.length;
 		else PreferenceArousalActiveIndex = (PreferenceArousalActiveIndex + 1) % PreferenceArousalActiveList.length;
 		Player.ArousalSettings.Active = PreferenceArousalActiveList[PreferenceArousalActiveIndex];
 	}
 
 	// Speech stuttering control
-	if ((MouseX >= 900) && (MouseX < 1400) && (MouseY >= 378) && (MouseY < 442)) {
+	if (MouseIn(900, 378, 500, 64)) {
 		if (MouseX <= 1150) PreferenceArousalAffectStutterIndex = (PreferenceArousalAffectStutterList.length + PreferenceArousalAffectStutterIndex - 1) % PreferenceArousalAffectStutterList.length;
 		else PreferenceArousalAffectStutterIndex = (PreferenceArousalAffectStutterIndex + 1) % PreferenceArousalAffectStutterList.length;
 		Player.ArousalSettings.AffectStutter = PreferenceArousalAffectStutterList[PreferenceArousalAffectStutterIndex];
 	}
 
 	// Show other player meter check box
-	if ((MouseX >= 550) && (MouseX < 614) && (MouseY >= 286) && (MouseY < 350))
+	if (MouseIn(550, 286, 64, 350))
 		Player.ArousalSettings.ShowOtherMeter = !Player.ArousalSettings.ShowOtherMeter;
 
 	// If the arousal is active, we allow more controls
 	if (PreferenceArousalIsActive()) {
 
 		// Meter affect your facial expressions check box
-		if ((MouseX >= 1250) && (MouseX < 1314) && (MouseY >= 286) && (MouseY < 350))
+		if (MouseIn(1250, 286, 64, 64))
 			Player.ArousalSettings.AffectExpression = !Player.ArousalSettings.AffectExpression;
 
 		// Arousal visible control
-		if ((MouseX >= 1505) && (MouseX < 1905) && (MouseY >= 193) && (MouseY <= 257)) {
+		if (MouseIn(1505, 193, 400, 64)) {
 			if (MouseX <= 1705) PreferenceArousalVisibleIndex = (PreferenceArousalVisibleList.length + PreferenceArousalVisibleIndex - 1) % PreferenceArousalVisibleList.length;
 			else PreferenceArousalVisibleIndex = (PreferenceArousalVisibleIndex + 1) % PreferenceArousalVisibleList.length;
 			Player.ArousalSettings.Visible = PreferenceArousalVisibleList[PreferenceArousalVisibleIndex];
 		}
 
 		// Fetish master control
-		if ((MouseX >= 900) && (MouseX < 1400) && (MouseY >= 463) && (MouseY <= 527)) {
+		if (MouseIn(900, 463, 500, 64)) {
 			if (MouseX <= 1150) PreferenceArousalFetishIndex = (PreferenceArousalFetishList.length + PreferenceArousalFetishIndex - 1) % PreferenceArousalFetishList.length;
 			else PreferenceArousalFetishIndex = (PreferenceArousalFetishIndex + 1) % PreferenceArousalFetishList.length;
 			PreferenceLoadFetishFactor();
 		}
 
 		// Fetish love control
-		if ((MouseX >= 1455) && (MouseX < 1905) && (MouseY >= 463) && (MouseY <= 527)) {
+		if (MouseIn(1455, 463, 450, 64)) {
 			if (MouseX <= 1680) PreferenceArousalFetishFactor = (5 + PreferenceArousalFetishFactor - 1) % 5;
 			else PreferenceArousalFetishFactor = (PreferenceArousalFetishFactor + 1) % 5;
 			for (let F = 0; F < Player.ArousalSettings.Fetish.length; F++)
@@ -1492,35 +1488,35 @@ function PreferenceSubscreenArousalClick() {
 		}
 
 		// Arousal activity control
-		if ((MouseX >= 900) && (MouseX < 1400) && (MouseY >= 548) && (MouseY <= 612)) {
+		if (MouseIn(900, 548, 500, 64)) {
 			if (MouseX <= 1150) PreferenceArousalActivityIndex = (PreferenceArousalActivityList.length + PreferenceArousalActivityIndex - 1) % PreferenceArousalActivityList.length;
 			else PreferenceArousalActivityIndex = (PreferenceArousalActivityIndex + 1) % PreferenceArousalActivityList.length;
 			PreferenceLoadActivityFactor();
 		}
 
 		// Arousal activity love on self control
-		if ((MouseX >= 900) && (MouseX < 1200) && (MouseY >= 633) && (MouseY <= 697)) {
+		if (MouseIn(900, 633, 300, 64)) {
 			if (MouseX <= 1050) PreferenceArousalActivityFactorSelf = (5 + PreferenceArousalActivityFactorSelf - 1) % 5;
 			else PreferenceArousalActivityFactorSelf = (PreferenceArousalActivityFactorSelf + 1) % 5;
 			PreferenceSetActivityFactor(Player, PreferenceArousalActivityList[PreferenceArousalActivityIndex], true, PreferenceArousalActivityFactorSelf);
 		}
 
 		// Arousal activity love on other control
-		if ((MouseX >= 1605) && (MouseX < 1905) && (MouseY >= 633) && (MouseY <= 697)) {
+		if (MouseIn(1605, 633, 300, 64)) {
 			if (MouseX <= 1755) PreferenceArousalActivityFactorOther = (5 + PreferenceArousalActivityFactorOther - 1) % 5;
 			else PreferenceArousalActivityFactorOther = (PreferenceArousalActivityFactorOther + 1) % 5;
 			PreferenceSetActivityFactor(Player, PreferenceArousalActivityList[PreferenceArousalActivityIndex], false, PreferenceArousalActivityFactorOther);
 		}
 
 		// Arousal zone love control
-		if ((Player.FocusGroup != null) && (MouseX >= 550) && (MouseX < 1150) && (MouseY >= 813) && (MouseY < 877)) {
+		if ((Player.FocusGroup != null) && MouseIn(550, 813, 600, 64)) {
 			if (MouseX <= 850) PreferenceArousalZoneFactor = (5 + PreferenceArousalZoneFactor - 1) % 5;
 			else PreferenceArousalZoneFactor = (PreferenceArousalZoneFactor + 1) % 5;
 			PreferenceSetZoneFactor(Player, Player.FocusGroup.Name, PreferenceArousalZoneFactor);
 		}
 
 		// Arousal zone orgasm check box
-		if ((Player.FocusGroup != null) && (MouseX >= 1230) && (MouseX < 1294) && (MouseY >= 813) && (MouseY < 877))
+		if ((Player.FocusGroup != null) && MouseIn(1230, 813, 64, 64))
 			PreferenceSetZoneOrgasm(Player, Player.FocusGroup.Name, !PreferenceGetZoneOrgasm(Player, Player.FocusGroup.Name));
 
 		// In arousal mode, the player can click on her zones
@@ -1543,10 +1539,10 @@ function PreferenceSubscreenArousalClick() {
 function PreferenceSubscreenSecurityClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenSecurityExit();
+	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenSecurityExit();
 
 	// If we must update the email
-	if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 365) && (MouseY < 415)) {
+	if (MouseIn(500, 365, 250, 50)) {
 		var EmailOld = ElementValue("InputEmailOld");
 		var EmailNew = ElementValue("InputEmailNew");
 		var E = /^[a-zA-Z0-9@.!#$%&'*+/=?^_`{|}~-]+$/;
