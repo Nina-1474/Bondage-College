@@ -1909,7 +1909,7 @@ function PreferenceSubscreenNotificationsClick() {
 
 	PreferenceNotificationsClickSetting(500, 635, NS.Disconnect, NotificationEventType.DISCONNECT);
 	PreferenceNotificationsClickSetting(500, 715, NS.Larp, NotificationEventType.LARP);
-	PreferenceNotificationsClickSetting(500, 820, NS.Test);
+	PreferenceNotificationsClickSetting(500, 820, NS.Test, NotificationEventType.TEST);
 
 	// Test buttons
 	if (MouseIn(800, 820, 450, 64)) {
@@ -1918,7 +1918,8 @@ function PreferenceSubscreenNotificationsClick() {
 	if (MouseIn(1286, 820, 450, 64)) NotificationResetAll();
 }
 
-/** Handles the click events within a multi-checkbox settings row.
+/**
+ * Handles the click events within a multi-checkbox settings row.
  * @param {number} Left - The X co-ordinate the row starts on
  * @param {number} Top - The Y co-ordinate the row starts on
  * @param {NotificationSetting} Setting - The player setting the row corresponds to
@@ -1929,6 +1930,7 @@ function PreferenceNotificationsClickSetting(Left, Top, Setting, EventType) {
 
 	// Toggle the alert type
 	if (MouseIn(Left, Top, 164, 64)) {
+		if (EventType) NotificationReset(EventType);
 		if (MouseXIn(Left, 83)) {
 			let prevType = NotificationAlertTypeList.findIndex(N => N === Setting.AlertType) - 1;
 			if (prevType < 0) prevType = NotificationAlertTypeList.length - 1;
@@ -1939,7 +1941,6 @@ function PreferenceNotificationsClickSetting(Left, Top, Setting, EventType) {
 			if (nextType > NotificationAlertTypeList.length - 1) nextType = 0;
 			Setting.AlertType = NotificationAlertTypeList[nextType];
 		}
-		if (EventType) NotificationReset(EventType);
 	}
 
 	// Toggle the audio type
@@ -1956,7 +1957,7 @@ function PreferenceNotificationsClickSetting(Left, Top, Setting, EventType) {
  */
 function PreferenceNotificationsExit() {
 
-	//If any of the settings now have audio enabled, enable the AudioSettings setting as well
+	// If any of the settings now have audio enabled, enable the AudioSettings setting as well
 	let enableAudio = false;
 	for (const setting in Player.NotificationSettings) {
 		let audio = Player.NotificationSettings[setting].Audio;
