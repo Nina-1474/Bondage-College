@@ -1210,7 +1210,7 @@ function PreferenceSubscreenVisibilityRun() {
 		DrawText(TextGet("VisibilityGroup"), 500, 225, "Black", "Gray");
 		DrawText(TextGet("VisibilityAsset"), 500, 304, "Black", "Gray");
 		DrawCheckbox(500, 352, 64, 64, TextGet("VisibilityCheckboxHide"), PreferenceVisibilityHideChecked);
-		if (PreferenceVisibilityCanBlock) DrawCheckbox(500, 432, 64, 64, TextGet("VisibilityCheckboxBlock"), PreferenceVisibilityBlockChecked);
+		DrawCheckbox(500, 432, 64, 64, TextGet("VisibilityCheckboxBlock"), PreferenceVisibilityBlockChecked, !PreferenceVisibilityCanBlock);
 		if (PreferenceVisibilityHideChecked) {
 			DrawImageResize("Screens/Character/Player/HiddenItem.png", 500, 516, 86, 86);
 			DrawText(TextGet("VisibilityWarning"), 600, 548, "Black", "Gray");
