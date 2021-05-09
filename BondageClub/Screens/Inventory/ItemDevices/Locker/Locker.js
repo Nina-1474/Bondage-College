@@ -81,7 +81,7 @@ function InventoryItemDevicesLockerClick() {
 }
 
 /**
- * Debounced callback for opacity slider changes
+ * Throttled callback for opacity slider changes
  * @param {Character} C - The character being modified
  * @param {Item} item - The item being modified
  * @param {number} brightness - The new brightness to set on the item
