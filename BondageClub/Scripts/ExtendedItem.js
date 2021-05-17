@@ -373,6 +373,7 @@ function ExtendedItemSelfProofRequirementCheck(C, Prerequisite) {
 	// Remove the item temporarily for prerequisite-checking
 	let CurrentItem = InventoryGet(C, C.FocusGroup.Name);
 	InventoryRemove(C, C.FocusGroup.Name, false);
+	CharacterRefresh(C, false, false);
 
 	if (!InventoryAllow(C, Prerequisite, true)) {
 		Allowed = false;
@@ -382,7 +383,7 @@ function ExtendedItemSelfProofRequirementCheck(C, Prerequisite) {
 	let DifficultyFactor = CurrentItem.Difficulty - CurrentItem.Asset.Difficulty;
 	CharacterAppearanceSetItem(C, C.FocusGroup.Name, CurrentItem.Asset, CurrentItem.Color, DifficultyFactor, null, false);
 	InventoryGet(C, C.FocusGroup.Name).Property = CurrentItem.Property;
-	CharacterRefresh(C, false);
+	CharacterRefresh(C, false, false);
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 
 	return Allowed;
