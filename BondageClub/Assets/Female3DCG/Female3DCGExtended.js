@@ -181,18 +181,18 @@ var AssetFemale3DCGExtended = {
 					{
 						Name: "Opacity", Key: "op",
 						Options: [
-								{},
-								{
-									Property: {
-										Effect: ["BlindLight"],
-									},
+							{},
+							{
+								Property: {
+									Effect: ["BlindLight"],
 								},
-								{
-									Property: {
-										Effect: ["BlindHeavy", "Prone"],
-									},
-								}
-							], // Opacity
+							},
+							{
+								Property: {
+									Effect: ["BlindHeavy", "Prone"],
+								},
+							}
+						], // Opacity
 					},
 				],
 			},
@@ -323,11 +323,17 @@ var AssetFemale3DCGExtended = {
 				Options: [
 					{
 						Name: "Normal",
-						Property: { Type: null },
+						Property: {
+							Type: null,
+							Effect: ["BlockMouth", "GagNormal"],
+						},
 					},
 					{
 						Name: "Tight",
-						Property: { Type: "Tight" },
+						Property: {
+							Type: "Tight",
+							Effect: ["BlockMouth", "GagNormal"],
+						},
 					},
 				],
 				Dialog: {
@@ -343,15 +349,24 @@ var AssetFemale3DCGExtended = {
 				Options: [
 					{
 						Name: "Normal",
-						Property: { Type: null },
+						Property: {
+							Type: null,
+							Effect: ["BlockMouth", "GagMedium"],
+						},
 					},
 					{
 						Name: "Shiny",
-						Property: { Type: "Shiny" },
+						Property: {
+							Type: "Shiny",
+							Effect: ["BlockMouth", "GagMedium"],
+						},
 					},
 					{
 						Name: "Tight",
-						Property: { Type: "Tight" },
+						Property: {
+							Type: "Tight",
+							Effect: ["BlockMouth", "GagMedium"],
+						},
 					},
 				],
 				Dialog: {
@@ -418,15 +433,24 @@ var AssetFemale3DCGExtended = {
 				Options: [
 					{
 						Name: "NoCup",
-						Property: { Type: null },
+						Property: {
+							Type: null,
+							Effect: ["BlockMouth", "GagEasy"],
+						},
 					},
 					{
 						Name: "Tip",
-						Property: { Type: null },
+						Property: {
+							Type: null,
+							Effect: ["BlockMouth", "GagEasy"],
+						},
 					},
 					{
 						Name: "Cup",
-						Property: { Type: "Cup" },
+						Property: {
+							Type: "Cup",
+							Effect: ["BlockMouth", "GagEasy"],
+						},
 					},
 				],
 				Dialog: {
@@ -651,6 +675,27 @@ var AssetFemale3DCGExtended = {
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "CupholderGag" },
 		},
 	}, // ItemMouth3
+	Mask: {
+		BunnyMask1: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Ears",
+						Property: { Type: null },
+					},
+					{
+						Name: "Earless",
+						Property: { Type: "Earless", OverridePriority: 51 },
+					},
+				],
+				Dialog: {
+					Load: "SelectBunnyMaskStyle",
+					TypePrefix: "BunnyMaskType",
+				},
+			}
+		} // BunnyMask1
+	}, // Mask
 };
 
 /**
