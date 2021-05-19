@@ -76,6 +76,12 @@ const ExtendedItemRequirementCheckMessageMemo = CommonMemoize(ExtendedItemRequir
 var ExtendedItemPermissionMode = false;
 
 /**
+ * Tracks whether a selected option's subscreen is active
+ * @type {boolean}
+ */
+var ExtendedItemSubscreen = null;
+
+/**
  * Loads the item extension properties
  * @param {ExtendedItemOption[]} Options - An Array of type definitions for each allowed extended type. The first item
  *     in the array should be the default option.
@@ -89,10 +95,10 @@ function ExtendedItemLoad(Options, DialogKey) {
 		DialogFocusItem.Property = JSON.parse(JSON.stringify(Options[0].Property));
 		// If the default type is not the null type, update the item to use this type
 		if (Options[0].Property.Type != null) {
-			var C = CharacterGetCurrent() || CharacterAppearanceSelection;
+			const C = CharacterGetCurrent() || CharacterAppearanceSelection;
 			// If the first option is blocked by the character, switch to the null type option
 			if (InventoryBlockedOrLimited(C, DialogFocusItem, Options[0].Property.Type)) {
-				let BaseOption = Options.find(O => O.Property.Type == null);
+				const BaseOption = Options.find(O => O.Property.Type == null);
 				if (BaseOption != null) DialogFocusItem.Property = JSON.parse(JSON.stringify(BaseOption));
 			}
 			CharacterRefresh(C);
@@ -111,11 +117,17 @@ function ExtendedItemLoad(Options, DialogKey) {
  *     in the array should be the default option.
  * @param {string} DialogPrefix - The prefix to the dialog keys for the display strings describing each extended type.
  *     The full dialog key will be <Prefix><Option.Name>
- * @param {number} OptionsPerPage - The number of options displayed on each page
+ * @param {number} [OptionsPerPage] - The number of options displayed on each page
  * @param {boolean} [ShowImages=true] - Denotes wether images should be shown for the specific item
  * @returns {void} Nothing
  */
 function ExtendedItemDraw(Options, DialogPrefix, OptionsPerPage, ShowImages = true) {
+	// If an option's subscreen is open, it overrides the standard screen
+	if (ExtendedItemSubscreen) {
+		CommonCallFunctionByNameWarn(ExtendedItemFunctionPrefix() + ExtendedItemSubscreen + "Draw");
+		return;
+	}
+
 	const C = CharacterGetCurrent() || CharacterAppearanceSelection;
 	const Asset = DialogFocusItem.Asset;
 	const ItemOptionsOffset = ExtendedItemGetOffset();
@@ -182,12 +194,14 @@ function ExtendedItemGetButtonColor(C, Option, Hover, IsSelected) {
 			ButtonColor = Hover ? "green" : "lime";
 		}
 	} else {
-		if (IsSelected) {
+		if (IsSelected && !Option.HasSubscreen) {
 			ButtonColor = "#888888";
 		} else if (BlockedOrLimited) {
 			ButtonColor = "Red";
 		} else if (FailSkillCheck) {
 			ButtonColor = "Pink";
+		} else if (IsSelected && Option.HasSubscreen) {
+			ButtonColor = Hover ? "Cyan" : "LightGreen";
 		} else {
 			ButtonColor = Hover ? "Cyan" : "White";
 		}
@@ -199,12 +213,19 @@ function ExtendedItemGetButtonColor(C, Option, Hover, IsSelected) {
  * Handles clicks on the extended item type selection screen
  * @param {ExtendedItemOption[]} Options - An Array of type definitions for each allowed extended type. The first item
  *     in the array should be the default option.
- * @param {number} OptionsPerPage - The number of options displayed on each page
+ * @param {number} [OptionsPerPage] - The number of options displayed on each page
  * @param {boolean} [ShowImages=true] - Denotes wether images are shown for the specific item
  * @returns {void} Nothing
  */
 function ExtendedItemClick(Options, OptionsPerPage, ShowImages = true) {
 	const C = CharacterGetCurrent() || CharacterAppearanceSelection;
+
+	// If an option's subscreen is open, pass the click into it
+	if (ExtendedItemSubscreen) {
+		CommonCallFunctionByNameWarn(ExtendedItemFunctionPrefix() + ExtendedItemSubscreen + "Click", C, Options);
+		return;
+	}
+
 	const IsSelfBondage = C.ID === 0;
 	const ItemOptionsOffset = ExtendedItemGetOffset();
 	const IsCloth = DialogFocusItem.Asset.Group.Clothing;
@@ -239,10 +260,10 @@ function ExtendedItemClick(Options, OptionsPerPage, ShowImages = true) {
 
 	// Options
 	for (let I = ItemOptionsOffset; I < Options.length && I < ItemOptionsOffset + OptionsPerPage; I++) {
-		var PageOffset = I - ItemOptionsOffset;
-		var X = XYPositions[OptionsPerPage][PageOffset][0];
-		var Y = XYPositions[OptionsPerPage][PageOffset][1];
-		var Option = Options[I];
+		const PageOffset = I - ItemOptionsOffset;
+		const X = XYPositions[OptionsPerPage][PageOffset][0];
+		const Y = XYPositions[OptionsPerPage][PageOffset][1];
+		const Option = Options[I];
 		if (MouseIn(X, Y, 225, 55 + ImageHeight)) {
 			ExtendedItemHandleOptionClick(C, Options, Option, IsSelfBondage);
 		}
@@ -257,6 +278,11 @@ function ExtendedItemClick(Options, OptionsPerPage, ShowImages = true) {
 function ExtendedItemExit() {
 	// invalidate the cache
 	ExtendedItemRequirementCheckMessageMemo.clearCache();
+
+	// Run the subscreen's Exit function if any
+	if (ExtendedItemSubscreen) {
+		CommonCallFunctionByName(ExtendedItemFunctionPrefix() + ExtendedItemSubscreen + "Exit");
+	}
 }
 
 
@@ -270,7 +296,7 @@ function ExtendedItemExit() {
  */
 function ExtendedItemSetType(C, Options, Option) {
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
-	var FunctionPrefix = ExtendedItemFunctionPrefix();
+	var FunctionPrefix = ExtendedItemFunctionPrefix() + (ExtendedItemSubscreen || "");
 
 	if (CurrentScreen == "ChatRoom") {
 		// Call the item's load function
@@ -333,13 +359,20 @@ function ExtendedItemHandleOptionClick(C, Options, Option, IsSelfBondage) {
 		if (Option.Property.Type == null || (C.ID == 0 && DialogFocusItem.Property.Type == Option.Property.Type)) return;
 		InventoryTogglePermission(DialogFocusItem, Option.Property.Type);
 	} else {
-		var BlockedOrLimited = InventoryBlockedOrLimited(C, DialogFocusItem, Option.Property.Type);
-		if (DialogFocusItem.Property.Type === Option.Property.Type || BlockedOrLimited) return;
+		if (InventoryBlockedOrLimited(C, DialogFocusItem, Option.Property.Type)) {
+			return;
+		}
+		if (DialogFocusItem.Property.Type === Option.Property.Type && !Option.HasSubscreen) {
+			return;
+		}
 
 		// use the unmemoized function to ensure we make a final check to the requirements
 		var RequirementMessage = ExtendedItemRequirementCheckMessage(Option, IsSelfBondage);
 		if (RequirementMessage) {
 			DialogExtendedMessage = RequirementMessage;
+		} else if (Option.HasSubscreen) {
+			ExtendedItemSubscreen = Option.Name;
+			CommonCallFunctionByNameWarn(ExtendedItemFunctionPrefix() + ExtendedItemSubscreen + "Load", C, Option);
 		} else {
 			ExtendedItemSetType(C, Options, Option);
 			ExtendedItemExit();
