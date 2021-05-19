@@ -117,7 +117,6 @@ function ExtendedItemLoad(Options, DialogKey) {
  */
 function ExtendedItemDraw(Options, DialogPrefix, OptionsPerPage, ShowImages = true) {
 	const C = CharacterGetCurrent() || CharacterAppearanceSelection;
-	const IsSelfBondage = C.ID === 0;
 	const Asset = DialogFocusItem.Asset;
 	const ItemOptionsOffset = ExtendedItemGetOffset();
 	const XYPositions = !Asset.Group.Clothing ? (ShowImages ? ExtendedXY : ExtendedXYWithoutImages) : ExtendedXYClothes;
@@ -136,20 +135,16 @@ function ExtendedItemDraw(Options, DialogPrefix, OptionsPerPage, ShowImages = tr
 
 	// Draw the possible variants and their requirements, arranged based on the number per page
 	for (let I = ItemOptionsOffset; I < Options.length && I < ItemOptionsOffset + OptionsPerPage; I++) {
-		var PageOffset = I - ItemOptionsOffset;
-		var X = XYPositions[OptionsPerPage][PageOffset][0];
-		var Y = XYPositions[OptionsPerPage][PageOffset][1];
+		const PageOffset = I - ItemOptionsOffset;
+		const X = XYPositions[OptionsPerPage][PageOffset][0];
+		const Y = XYPositions[OptionsPerPage][PageOffset][1];
 
-		var Option = Options[I];
-		var Hover = MouseIn(X, Y, 225, 55 + ImageHeight) && !CommonIsMobile;
-		var FailSkillCheck = !!ExtendedItemRequirementCheckMessageMemo(Option, IsSelfBondage);
-		var IsSelected = DialogFocusItem.Property.Type == Option.Property.Type;
-		var BlockedOrLimited = InventoryBlockedOrLimited(C, DialogFocusItem, Option.Property.Type);
-		var PlayerBlocked = InventoryIsPermissionBlocked(Player, DialogFocusItem.Asset.DynamicName(Player), DialogFocusItem.Asset.DynamicGroupName, Option.Property.Type);
-		var PlayerLimited = InventoryIsPermissionLimited(Player, DialogFocusItem.Asset.Name, DialogFocusItem.Asset.Group.Name, Option.Property.Type);
-		var Color = ExtendedItemPermissionMode ? ((C.ID == 0 && IsSelected) || Option.Property.Type == null ? "#888888" : PlayerBlocked ? Hover ? "red" : "pink" : PlayerLimited ? Hover ? "orange" : "#fed8b1" : Hover ? "green" : "lime") : (IsSelected ? "#888888" : BlockedOrLimited ? "Red" : FailSkillCheck ? "Pink" : Hover ? "Cyan" : "White");
+		const Option = Options[I];
+		const Hover = MouseIn(X, Y, 225, 55 + ImageHeight) && !CommonIsMobile;
+		const IsSelected = DialogFocusItem.Property.Type == Option.Property.Type;
+		const ButtonColor = ExtendedItemGetButtonColor(C, Option, Hover, IsSelected);
 
-		DrawButton(X, Y, 225, 55 + ImageHeight, "", Color, null, null, IsSelected);
+		DrawButton(X, Y, 225, 55 + ImageHeight, "", ButtonColor, null, null, IsSelected);
 		if (ShowImages) DrawImage(`${AssetGetInventoryPath(Asset)}/${Option.Name}.png`, X + 2, Y);
 		DrawTextFit(DialogFindPlayer(DialogPrefix + Option.Name), X + 112, Y + 30 + ImageHeight, 225, "black");
 		if (ControllerActive == true) {
@@ -159,6 +154,45 @@ function ExtendedItemDraw(Options, DialogPrefix, OptionsPerPage, ShowImages = tr
 
 	// Permission mode toggle is always available
 	DrawButton(1775, 25, 90, 90, "", "White", ExtendedItemPermissionMode ? "Icons/DialogNormalMode.png" : "Icons/DialogPermissionMode.png", DialogFindPlayer(ExtendedItemPermissionMode ? "DialogNormalMode" : "DialogPermissionMode"));
+}
+
+/**
+ * Determine the background color for the item option's button
+ * @param {Character} C - The character wearing the item
+ * @param {ExtendedItemOption} Option - A type for the extended item
+ * @param {boolean} Hover - TRUE if the mouse cursor is on the button
+ * @param {boolean} IsSelected - TRUE if the item's current type matches Option
+ * @returns {string} The name or hex code of the color
+ */
+function ExtendedItemGetButtonColor(C, Option, Hover, IsSelected) {
+	const IsSelfBondage = C.ID === 0;
+	const FailSkillCheck = !!ExtendedItemRequirementCheckMessageMemo(Option, IsSelfBondage);
+	const BlockedOrLimited = InventoryBlockedOrLimited(C, DialogFocusItem, Option.Property.Type);
+	const PlayerBlocked = InventoryIsPermissionBlocked(Player, DialogFocusItem.Asset.DynamicName(Player), DialogFocusItem.Asset.DynamicGroupName, Option.Property.Type);
+	const PlayerLimited = InventoryIsPermissionLimited(Player, DialogFocusItem.Asset.Name, DialogFocusItem.Asset.Group.Name, Option.Property.Type);
+	let ButtonColor;
+	if (ExtendedItemPermissionMode) {
+		if ((IsSelfBondage && IsSelected) || Option.Property.Type == null) {
+			ButtonColor = "#888888";
+		} else if (PlayerBlocked) {
+			ButtonColor = Hover ? "red" : "pink";
+		} else if (PlayerLimited) {
+			ButtonColor = Hover ? "orange" : "#fed8b1";
+		} else {
+			ButtonColor = Hover ? "green" : "lime";
+		}
+	} else {
+		if (IsSelected) {
+			ButtonColor = "#888888";
+		} else if (BlockedOrLimited) {
+			ButtonColor = "Red";
+		} else if (FailSkillCheck) {
+			ButtonColor = "Pink";
+		} else {
+			ButtonColor = Hover ? "Cyan" : "White";
+		}
+	}
+	return ButtonColor;
 }
 
 /**
