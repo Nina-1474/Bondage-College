@@ -105,7 +105,7 @@ function InventoryHairAccessory1HaloClick() {
  */
 const InventoryHairAccessory1HaloBrightnessChange = CommonLimitFunction((C, item, brightness) => {
 	item.Property.Opacity = brightness;
-	CharacterRefresh(C, false);
+	CharacterLoadCanvas(C);
 });
 
 /**

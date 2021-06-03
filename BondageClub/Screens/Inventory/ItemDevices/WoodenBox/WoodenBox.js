@@ -179,7 +179,7 @@ function InventoryItemDevicesWoodenBoxSetOpacity(property, opacity) {
 const InventoryItemDevicesWoodenBoxOpacityChange = CommonLimitFunction((C, item, opacity) => {
 	item = DialogFocusItem || item;
 	item.Property.Opacity = Number(opacity);
-	CharacterRefresh(C, false);
+	CharacterLoadCanvas(C);
 });
 
 /**
@@ -190,7 +190,7 @@ const InventoryItemDevicesWoodenBoxTextChange = CommonLimitFunction((C, item, te
 	item = DialogFocusItem || item;
 	if (DynamicDrawTextRegex.test(text)) {
 		item.Property.Text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
-		CharacterRefresh(C, false);
+		CharacterLoadCanvas(C);
 	}
 });
 

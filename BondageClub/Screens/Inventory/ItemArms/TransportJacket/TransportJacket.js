@@ -91,7 +91,7 @@ const InventoryItemArmsTransportJacketTextChange = CommonLimitFunction((C, item,
 	item = DialogFocusItem || item;
 	if (DynamicDrawTextRegex.test(text)) {
 		item.Property.Text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
-		CharacterRefresh(C, false);
+		CharacterLoadCanvas(C);
 	}
 });
 

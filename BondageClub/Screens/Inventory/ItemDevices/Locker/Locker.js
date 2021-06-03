@@ -88,7 +88,7 @@ function InventoryItemDevicesLockerClick() {
  */
 const InventoryItemDevicesLockerOpacityChange = CommonLimitFunction((C, item, brightness) => {
 	item.Property.Opacity = brightness;
-	CharacterRefresh(C, false);
+	CharacterLoadCanvas(C);
 });
 
 /**

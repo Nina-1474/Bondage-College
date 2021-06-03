@@ -73,8 +73,8 @@ const InventoryItemArmsHempRopeSuspensionHogtiedHeightChange = CommonLimitFuncti
 	item.Property.OverrideHeight.HeightRatioProportion = 1 - height;
 	item.Property.OverrideHeight.Height = Math.round(HempRopeSuspensionHogtiedMaxHeight - (1 - height) * (HempRopeSuspensionHogtiedMaxHeight - HempRopeSuspensionHogtiedMinHeight));
 
-	// Refresh to see the change
-	CharacterRefresh(C, false, false);
+	// Reload to see the change
+	CharacterLoadCanvas(C);
 });
 
 /**
