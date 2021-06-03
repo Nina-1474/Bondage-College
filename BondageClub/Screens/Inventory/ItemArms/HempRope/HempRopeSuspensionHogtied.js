@@ -54,7 +54,7 @@ function InventoryItemArmsHempRopeSuspensionHogtiedLoad(C, Option) {
  * @param {string} fromElementId - The control that triggered the change
  * @returns {void} - Nothing
  */
-const InventoryItemArmsHempRopeSuspensionHogtiedHeightChange = CommonThrottle((C, item, height, fromElementId) => {
+const InventoryItemArmsHempRopeSuspensionHogtiedHeightChange = CommonLimitFunction((C, item, height, fromElementId) => {
 	// Validate the value
 	if (isNaN(height) || height < 0 || height > 1) return;
 
@@ -75,7 +75,7 @@ const InventoryItemArmsHempRopeSuspensionHogtiedHeightChange = CommonThrottle((C
 
 	// Refresh to see the change
 	CharacterRefresh(C, false, false);
-}, 100);
+});
 
 /**
  * Handles drawing the extended item's screen
