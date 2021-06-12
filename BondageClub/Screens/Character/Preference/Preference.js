@@ -758,7 +758,7 @@ function PreferenceSubscreenGeneralClick() {
 	if (MouseIn(500, 280, 90, 90)) {
 		Player.ItemPermission++;
 		if (Player.ItemPermission > 5) Player.ItemPermission = 0;
-		if (Player.GetDifficulty() >= 3) LoginExtremeItemSettings();
+		if (Player.GetDifficulty() >= 3) LoginExtremeItemSettings(Player.ItemPermission == 0);
 	}
 
 	// If we must show/hide/use the color picker
@@ -810,7 +810,7 @@ function PreferenceSubscreenDifficultyClick() {
 					Player.Difficulty = { LastChange: CurrentTime, Level: PreferenceDifficultyLevel };
 					ServerSend("AccountDifficulty", PreferenceDifficultyLevel);
 					PreferenceInitPlayer();
-					LoginDifficulty();
+					LoginDifficulty(true);
 					PreferenceDifficultyLevel = null;
 					PreferenceSubscreenDifficultyExit();
 				}
