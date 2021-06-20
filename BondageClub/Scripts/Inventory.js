@@ -659,9 +659,9 @@ function InventoryGetItemProperty(Item, PropertyName, CheckGroup=false) {
 * @param {Item} item - The item from appearance that we must validate
 */
 function InventoryExpressionTrigger(C, item) {
-	const expressions = item.Asset.DynamicExpressionTrigger(C);
-	if (item && item.Asset && expressions) {
-		InventoryExpressionTriggerApply(C, expressions);
+	if (item && item.Asset) {
+		const expressions = item.Asset.DynamicExpressionTrigger(C);
+		if (expressions) InventoryExpressionTriggerApply(C, expressions);
 	}
 }
 
