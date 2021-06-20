@@ -1016,3 +1016,17 @@ function InventoryChatRoomAllow(Category) {
 				return false;
 	return true;
 }
+
+/**
+ * Applies a preset expression from being shocked to the character if able
+ * @param {Character} C - The character to update
+ * @returns {void} - Nothing
+ */
+function InventoryShockExpression(C) {
+	const expressions = [
+		{ Group: "Eyebrows", Name: "Soft", Timer: 10 },
+		{ Group: "Blush", Name: "Medium", Timer: 15 },
+		{ Group: "Eyes", Name: "Closed", Timer: 5 },
+	];
+	InventoryExpressionTriggerApply(C, expressions);
+}

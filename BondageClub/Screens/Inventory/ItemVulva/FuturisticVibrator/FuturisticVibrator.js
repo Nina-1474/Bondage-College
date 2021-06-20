@@ -126,7 +126,15 @@ function InventoryItemVulvaFuturisticVibratorSetMode(C, Item, Option) {
 		Dictionary.push({ Automatic: true });
 		ServerSend("ChatRoomChat", { Content: Message, Type: "Action", Dictionary });
 	}
-    CharacterSetFacialExpression(C, "Blush", "Soft", 5);
+
+	if (C.OnlineSharedSettings && C.OnlineSharedSettings.ItemsAffectExpressions) {
+		if (Item.Property.Intensity > -1) {
+			CharacterSetFacialExpression(C, "Blush", "Medium", 5);
+		}
+		else {
+			CharacterSetFacialExpression(C, "Eyebrows", "Soft", 5);
+		}
+	}
 }
 
 // Trigger a shock automatically
@@ -140,9 +148,7 @@ function InventoryItemVulvaFuturisticVibratorTriggerShock(C, Item) {
 			ServerSend("ChatRoomChat", { Content: "FuturisticVibratorShockTrigger", Type: "Action", Dictionary });
 	}
 
-	CharacterSetFacialExpression(C, "Eyebrows", "Soft", 10);
-	CharacterSetFacialExpression(C, "Blush", "Soft", 15);
-	CharacterSetFacialExpression(C, "Eyes", "Closed", 5);
+	InventoryShockExpression(C);
 }
 
 
