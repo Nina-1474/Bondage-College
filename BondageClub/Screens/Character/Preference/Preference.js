@@ -414,6 +414,7 @@ function PreferenceInitPlayer() {
 		}
 		C.OnlineSharedSettings.GameVersion = GameVersion;
 	}
+	if (typeof C.OnlineSharedSettings.ItemsAffectExpressions !== "boolean") C.OnlineSharedSettings.ItemsAffectExpressions = true;
 
 	// Graphical settings
 	if (!C.GraphicsSettings) C.GraphicsSettings = {};
