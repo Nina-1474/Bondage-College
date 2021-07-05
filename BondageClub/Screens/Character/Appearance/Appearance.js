@@ -1094,7 +1094,7 @@ function AppearanceClick() {
 					var CurrentItem = InventoryGet(C, C.FocusGroup.Name);
 
 					if (CurrentItem && (CurrentItem.Asset.Name == Item.Asset.Name)) return;
-					InventoryTogglePermission(Item, null);
+					DialogInventoryTogglePermission(Item);
 
 				} else {
 					if (InventoryBlockedOrLimited(C, Item)) return;

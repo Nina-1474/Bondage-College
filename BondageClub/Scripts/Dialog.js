@@ -638,6 +638,7 @@ function DialogInventoryCreateItem(C, item, isWorn, sortOrder) {
 
 	// Determine the icons to display in the preview image
 	let icons = [];
+	if (isFavorite) icons.push("Favorite");
 	if (InventoryItemHasEffect(item, "Lock", true)) icons.push(isWorn ? "Locked" : "Unlocked");
 	icons = icons.concat(asset.PreviewIcons);
 	if (asset.OwnerOnly) icons.push("OwnerOnly");
@@ -1244,7 +1245,7 @@ function DialogItemClick(ClickItem) {
 	// In permission mode, the player can allow or block items for herself
 	if ((C.ID == 0) && DialogItemPermissionMode) {
 		if (ClickItem.Worn || (CurrentItem && (CurrentItem.Asset.Name == ClickItem.Asset.Name))) return;
-		InventoryTogglePermission(ClickItem, null);
+		DialogInventoryTogglePermission(ClickItem);
 		return;
 	}
 
@@ -1306,6 +1307,19 @@ function DialogItemClick(ClickItem) {
 }
 
 /**
+ * Toggle permission of an item in the dialog inventory list
+ * @param {DialogInventoryItem} item
+ */
+function DialogInventoryTogglePermission(item) {
+	InventoryTogglePermission(item, null);
+
+	// Refresh the inventory item
+	const itemIndex = DialogInventory.findIndex(i => i.Asset.Name == item.Asset.Name && i.Asset.Group.Name == item.Asset.Group.Name);
+	const sortOrder = parseInt(item.SortOrder.replace(/[^0-9].+/gm, '') || DialogSortOrder.Usable); // only keep the number at the start
+	DialogInventory[itemIndex] = DialogInventoryCreateItem(Player, item, item.Worn, sortOrder);
+}
+
+/**
  * Handles the click in the dialog screen
  * @returns {void} - Nothing
  */
@@ -1317,7 +1331,6 @@ function DialogClick() {
 		CurrentCharacter.HeightModifier = 0;
 		return;
 	}
-
 
 	if (DialogColor != null && CurrentCharacter.FocusGroup && InventoryGet(CurrentCharacter, CurrentCharacter.FocusGroup.Name) && MouseIn(1300, 25, 675, 950)) {
 		return ItemColorClick(CurrentCharacter, CurrentCharacter.FocusGroup.Name, 1200, 25, 775, 950, true);
