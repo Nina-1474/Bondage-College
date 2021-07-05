@@ -638,6 +638,7 @@ function DialogInventoryCreateItem(C, item, isWorn, sortOrder) {
 
 	// Determine the icons to display in the preview image
 	let icons = [];
+	if (InventoryItemHasEffect(item, "Lock", true)) icons.push(isWorn ? "Locked" : "Unlocked");
 	icons = icons.concat(asset.PreviewIcons);
 	if (asset.OwnerOnly) icons.push("OwnerOnly");
 	if (asset.LoverOnly) icons.push("LoverOnly");
@@ -1722,7 +1723,6 @@ function DialogDrawItemMenu(C) {
 				DrawAssetPreview(X, Y, Item.Asset, { C: Player, Background, Vibrating: Item.Vibrating, Icons: Item.Icons });
 			}
 
-			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;
 			if (X > 1800) {
 				X = 1000;

@@ -709,7 +709,6 @@ function AppearanceRun() {
 			}
 
 			setButton(X, Y);
-			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;
 			if (X > 1800) {
 				X = 1250;
