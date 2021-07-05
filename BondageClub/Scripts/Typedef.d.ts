@@ -128,7 +128,7 @@ interface AssetGroup {
 	DrawingBlink: boolean;
 	InheritColor?: string;
 	FreezeActivePose: string[];
-	PreviewZone?: [number, number, number, number][];
+	PreviewZone?: [number, number, number, number];
 	DynamicGroupName: string;
 }
 
@@ -272,7 +272,7 @@ interface Asset {
 	IsRestraint: boolean;
 	BodyCosplay: boolean;
 	OverrideBlinking: boolean;
-	DialogSortOverride?: number;
+	DialogSortOverride?: DialogSortOrder;
 	DynamicDescription: (C: Character) => string;
 	DynamicPreviewImage: (C: Character) => string;
 	DynamicAllowInventoryAdd: (C: Character) => boolean;
@@ -345,6 +345,14 @@ interface Item {
 	Color?: string | string[];
 	Difficulty?: number;
 	Property?: ItemProperties;
+}
+
+interface DialogInventoryItem extends Item {
+	Worn: boolean;
+	Icons: string[];
+	SortOrder: string;
+	Hidden: boolean;
+	Vibrating: boolean;
 }
 
 interface Skill {
