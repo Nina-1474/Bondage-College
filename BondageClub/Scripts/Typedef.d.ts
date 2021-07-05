@@ -274,7 +274,7 @@ interface Asset {
 	OverrideBlinking: boolean;
 	DialogSortOverride?: number;
 	DynamicDescription: (C: Character) => string;
-	DynamicPreviewIcon: (C: Character) => string;
+	DynamicPreviewImage: (C: Character) => string;
 	DynamicAllowInventoryAdd: (C: Character) => boolean;
 	DynamicExpressionTrigger: (C: Character) => ExpressionTrigger[];
 	DynamicName: (C?: Character) => string;
@@ -301,6 +301,7 @@ interface Asset {
 	ColorableLayerCount: number;
 	Archetype?: string;
 	Attribute: string[];
+	PreviewIcons: string[];
 }
 
 /** An ItemBundle is a minified version of the normal Item */
