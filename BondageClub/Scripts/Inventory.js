@@ -949,12 +949,13 @@ function InventoryIsWorn(C, AssetName, AssetGroup) {
  * Toggles an item's permission for the player
  * @param {Item} Item - Appearance item to toggle
  * @param {string} Type - Type of the item to toggle
+ * @param {boolean} Worn - True if the player is changing permissions for an item they're wearing
  * @returns {void} - Nothing
  */
-function InventoryTogglePermission(Item, Type) {
+function InventoryTogglePermission(Item, Type, Worn) {
 	const onExtreme = Player.GetDifficulty() >= 3;
-	const blockAllowed = !onExtreme;
-	const limitedAllowed = !onExtreme || MainHallStrongLocks.includes(Item.Asset.Name);
+	const blockAllowed = !Worn && !onExtreme;
+	const limitedAllowed = !Worn && (!onExtreme || MainHallStrongLocks.includes(Item.Asset.Name));
 
 	const removeFromPermissions = (B) => B.Name != Item.Asset.Name || B.Group != Item.Asset.Group.Name || B.Type != Type;
 	const permissionItem = { Name: Item.Asset.Name, Group: Item.Asset.Group.Name, Type: Type };

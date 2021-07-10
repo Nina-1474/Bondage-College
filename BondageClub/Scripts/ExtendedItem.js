@@ -350,8 +350,9 @@ function ExtendedItemSetType(C, Options, Option) {
  */
 function ExtendedItemHandleOptionClick(C, Options, Option, IsSelfBondage) {
 	if (ExtendedItemPermissionMode) {
-		if (Option.Property.Type == null || (C.ID == 0 && DialogFocusItem.Property.Type == Option.Property.Type)) return;
-		InventoryTogglePermission(DialogFocusItem, Option.Property.Type);
+		if (Option.Property.Type == null) return;
+		const worn = C.ID == 0 && DialogFocusItem.Property.Type == Option.Property.Type;
+		InventoryTogglePermission(DialogFocusItem, Option.Property.Type, worn);
 	} else {
 		if (DialogFocusItem.Property.Type === Option.Property.Type && !Option.HasSubscreen) {
 			return;

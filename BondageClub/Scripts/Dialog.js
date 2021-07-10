@@ -1243,8 +1243,8 @@ function DialogItemClick(ClickItem) {
 
 	// In permission mode, the player can allow or block items for herself
 	if ((C.ID == 0) && DialogItemPermissionMode) {
-		if (ClickItem.Worn || (CurrentItem && (CurrentItem.Asset.Name == ClickItem.Asset.Name))) return;
-		DialogInventoryTogglePermission(ClickItem);
+		const worn = (ClickItem.Worn || (CurrentItem && (CurrentItem.Asset.Name == ClickItem.Asset.Name)));
+		DialogInventoryTogglePermission(ClickItem, worn);
 		return;
 	}
 
@@ -1307,10 +1307,11 @@ function DialogItemClick(ClickItem) {
 
 /**
  * Toggle permission of an item in the dialog inventory list
+ * @param {boolean} worn - True if the player is changing permissions for an item they're wearing
  * @param {DialogInventoryItem} item
  */
-function DialogInventoryTogglePermission(item) {
-	InventoryTogglePermission(item, null);
+function DialogInventoryTogglePermission(item, worn) {
+	InventoryTogglePermission(item, null, worn);
 
 	// Refresh the inventory item
 	const itemIndex = DialogInventory.findIndex(i => i.Asset.Name == item.Asset.Name && i.Asset.Group.Name == item.Asset.Group.Name);
