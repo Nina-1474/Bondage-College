@@ -947,11 +947,15 @@ function InventoryIsWorn(C, AssetName, AssetGroup) {
 
 /**
  * Toggles an item's permission for the player
- * @param {object} Item - Appearance item to toggle
- * @param {object} Type - Type of the item to toggle
+ * @param {Item} Item - Appearance item to toggle
+ * @param {string} Type - Type of the item to toggle
  * @returns {void} - Nothing
  */
 function InventoryTogglePermission(Item, Type) {
+	const onExtreme = Player.GetDifficulty() >= 3;
+	const blockAllowed = !onExtreme;
+	const limitedAllowed = !onExtreme || MainHallStrongLocks.includes(Item.Asset.Name);
+
 	const removeFromPermissions = (B) => B.Name != Item.Asset.Name || B.Group != Item.Asset.Group.Name || B.Type != Type;
 	const permissionItem = { Name: Item.Asset.Name, Group: Item.Asset.Group.Name, Type: Type };
 	if (InventoryIsPermissionBlocked(Player, Item.Asset.Name, Item.Asset.Group.Name, Type)) {
@@ -960,10 +964,10 @@ function InventoryTogglePermission(Item, Type) {
 	} else if (InventoryIsPermissionLimited(Player, Item.Asset.Name, Item.Asset.Group.Name, Type)) {
 		Player.LimitedItems = Player.LimitedItems.filter(removeFromPermissions);
 	} else if (InventoryIsFavorite(Player, Item.Asset.Name, Item.Asset.Group.Name, Type)) {
-		if (Player.GetDifficulty() >= 3)
-			Player.LimitedItems.push(permissionItem);
-		else
+		if (blockAllowed)
 			Player.BlockItems.push(permissionItem);
+		else if (limitedAllowed)
+			Player.LimitedItems.push(permissionItem);
 		Player.FavoriteItems = Player.FavoriteItems.filter(removeFromPermissions);
 	} else {
 		Player.FavoriteItems.push(permissionItem);

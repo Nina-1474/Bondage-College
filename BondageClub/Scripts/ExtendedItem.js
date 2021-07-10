@@ -162,11 +162,9 @@ function ExtendedItemDraw(Options, DialogPrefix, OptionsPerPage, ShowImages = tr
 	}
 
 	// Permission mode toggle
-	if (Player.GetDifficulty() < 3) {
-		DrawButton(1775, 25, 90, 90, "", "White",
-			ExtendedItemPermissionMode ? "Icons/DialogNormalMode.png" : "Icons/DialogPermissionMode.png",
-			DialogFindPlayer(ExtendedItemPermissionMode ? "DialogNormalMode" : "DialogPermissionMode"));
-	}
+	DrawButton(1775, 25, 90, 90, "", "White",
+		ExtendedItemPermissionMode ? "Icons/DialogNormalMode.png" : "Icons/DialogPermissionMode.png",
+		DialogFindPlayer(ExtendedItemPermissionMode ? "DialogNormalMode" : "DialogPermissionMode"));
 }
 
 /**
@@ -251,7 +249,7 @@ function ExtendedItemClick(Options, OptionsPerPage, ShowImages = true) {
 	}
 
 	// Permission toggle button
-	if (MouseIn(1775, 25, 90, 90) && Player.GetDifficulty() < 3) {
+	if (MouseIn(1775, 25, 90, 90)) {
 		if (ExtendedItemPermissionMode && CurrentScreen == "ChatRoom") ChatRoomCharacterUpdate(Player);
 		ExtendedItemPermissionMode = !ExtendedItemPermissionMode;
 	}
