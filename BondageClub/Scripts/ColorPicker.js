@@ -232,17 +232,17 @@ function ColorPickerSelectButton(Event) {
 
 /**
  * Alters the color picker display based on the selected value
- * @param {boolean} [updateSourceElement] - False if the change came from a typed hex value
+ * @param {boolean} [sourceElementChanged=false] - True if the color was updated by the text input element
  * @returns {void} - Nothing
  */
-function ColorPickerNotify(updateSourceElement=true) {
+function ColorPickerNotify(sourceElementChanged = false) {
 	ColorPickerLastHSV = Object.assign({}, ColorPickerHSV);
-	ColorPickerCSS = ColorPickerHSVToCSS(ColorPickerHSV);
+	if (!sourceElementChanged) ColorPickerCSS = ColorPickerHSVToCSS(ColorPickerHSV);
 	if (ColorPickerCallback) {
 		ColorPickerCallback(ColorPickerCSS);
 	}
 
-	if (updateSourceElement && ColorPickerSourceElement) {
+	if (!sourceElementChanged && ColorPickerSourceElement) {
 		ColorPickerSourceElement.value = ColorPickerCSS;
 	}
 }
@@ -342,7 +342,7 @@ function ColorPickerDraw(X, Y, Width, Height, Src, Callback) {
 				if (!ColorPickerCSSColorEquals(UserInputColor, ColorPickerCSS)) {
 					ColorPickerCSS = UserInputColor;
 					ColorPickerHSV = ColorPickerCSSToHSV(UserInputColor, ColorPickerHSV);
-					ColorPickerNotify(false);
+					ColorPickerNotify(true);
 				}
 			} else if (UserInputColor === "DEFAULT" && !ColorPickerIsDefault) {
 				ColorPickerIsDefault = true;
