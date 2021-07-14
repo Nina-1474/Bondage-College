@@ -423,7 +423,8 @@ function InventoryLocked(C, AssetGroup, CheckProperties) {
  * @param {boolean} [Extend=true] - Whether or not to randomly extend the item (i.e. set the item type), provided it has
  * an archetype that supports random extension
  * @param {string[]} [AllowedAssets=null] - A list of assets from which one must be selected
- * @param {boolean} [IgnoreRequirements=false] - If True, the group being blocked and prerequisites will not prevent the item being added
+ * @param {boolean} [IgnoreRequirements=false] - If True, the group being blocked and prerequisites will not prevent the item being added.
+ *  NOTE: Long-term this should be replaced with better checks before calling this function.
  * @returns {void} - Nothing
  */
 function InventoryWearRandom(C, GroupName, Difficulty, Refresh, MustOwn = false, Extend = true, AllowedAssets = null, IgnoreRequirements = false) {
@@ -500,6 +501,7 @@ function InventoryRandomExtend(C, GroupName) {
  * @param {Asset[]} [AllowedAssets] - Optional parameter: A list of assets from which one can be selected. If not provided,
  *     the full list of all assets is used.
  * @param {boolean} [IgnorePrerequisites=false] - If True, skip the step to check whether prerequisites are met
+ *  NOTE: Long-term this should be replaced with better checks before calling this function.
  * @returns {Asset} - The randomly selected asset
  */
 function InventoryGetRandom(C, GroupName, AllowedAssets, IgnorePrerequisites = false) {
